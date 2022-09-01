@@ -34,8 +34,6 @@ public class PictureElementPresenter : ElementPresenterBase
 
     public override async Task Initialize()
     {
-        bool IsSymbolic = false; //TODO: decide what to do with the symbolic thing
-
         var material = await GetImageMaterial(src);
         if (material != null && gameObject != null) //Bail out if the object has been destroyed while we were waiting to retrieve the image)
         {
@@ -54,14 +52,6 @@ public class PictureElementPresenter : ElementPresenterBase
 
             HasVisual = true;
         }
-
-        //if (IsSymbolic)
-        //{
-        //    Destroy(GetComponent<GrabSyncMonitor>());
-        //    Destroy(GetComponent<Autohand.DistanceGrabbable>());
-        //    Destroy(GetComponent<Autohand.Grabbable>());
-        //    Destroy(GetComponent<Rigidbody>());
-        //}
     }
 
     public static async Task<Material> GetImageMaterial(string Url)
