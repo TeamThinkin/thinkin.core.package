@@ -11,6 +11,8 @@ public static class Config
     public const string PlatformKey = "StandaloneWindows64";
 #elif UNITY_ANDROID
     public const string PlatformKey = "Android";
+#elif UNITY_WEBGL
+    public const string PlatformKey = "WebGL";
 #endif
 
     public const string DefaultHomeServerAuthortyAddress = "thinkin-api.glitch.me";

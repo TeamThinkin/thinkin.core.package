@@ -64,6 +64,7 @@ public static class DocumentManager
         using (var request = new UnityWebRequest(Url, "GET"))
         {
             request.SetRequestHeader("User-Agent", "Thinkin/" + Application.version);
+            request.SetRequestHeader("Accept", "text/intervrse");
             //if (UserInfo.CurrentUser != null) request.SetRequestHeader("auth", UserInfo.CurrentUser.AuthToken); //TODO: reevaluate how to handle user authentication here
             request.downloadHandler = new DownloadHandlerBuffer();
 
