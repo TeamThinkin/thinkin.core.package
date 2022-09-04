@@ -21,14 +21,14 @@ public static class ElementPresenterFactory
 
     static ElementPresenterFactory()
     {
-        discoverTypes();
-    }
-
-    private static void discoverTypes()
-    {
         Presenters = new Dictionary<string, ElementPresenterInfo>();
 
-        var types = from t in Assembly.GetExecutingAssembly().GetTypes()
+        DiscoverTypes(Assembly.GetExecutingAssembly());
+    }
+
+    public static void DiscoverTypes(Assembly SearchAssembly)
+    {
+        var types = from t in SearchAssembly.GetTypes()
                     where !t.IsAbstract && t.GetInterfaces().Contains(typeof(IElementPresenter))
                     select t;
 
@@ -39,15 +39,27 @@ public static class ElementPresenterFactory
             {
                 var prefab = Resources.Load<GameObject>(presenterAttribute.PrefabPath);
                 if (prefab != null)
-                    Presenters.Add(presenterAttribute.Tag, new ElementPresenterInfo()
+                {
+                    var presenterInfo = new ElementPresenterInfo()
                     {
                         HtmlTag = presenterAttribute.Tag,
                         PresenterType = type,
                         Prefab = prefab,
                         IsContainer = presenterAttribute.IsContainer
-                    });
-                else
-                    Debug.LogError("Invalid prefab path for IContentPresenter (" + type.Name + "): " + presenterAttribute.PrefabPath);
+                    };
+
+                    if (Presenters.ContainsKey(presenterAttribute.Tag))
+                    {
+                        Debug.Log("We already have this one: " + presenterAttribute.Tag);
+                        Presenters[presenterAttribute.Tag] = presenterInfo;
+                    }
+                    else
+                    {
+
+                        Presenters.Add(presenterAttribute.Tag, presenterInfo);
+                    }
+                }
+                else Debug.LogError("Invalid prefab path for IContentPresenter (" + type.Name + "): " + presenterAttribute.PrefabPath);
             }
             else Debug.LogError("IElementPresenter (" + type.Name + ") must have an ElementPresenterAttribute");
         }
