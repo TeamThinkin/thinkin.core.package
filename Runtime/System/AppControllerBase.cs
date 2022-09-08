@@ -10,6 +10,7 @@ public abstract class AppControllerBase : MonoBehaviour
     public abstract Rigidbody PlayerBody { get; }
     public abstract Camera MainCamera { get; }
     public abstract string BundleVersionCode { get; }
+    public abstract IUIManager UIManager { get; }
 
     public abstract void SetPlayerPosition(Vector3 WorldPosition);
     public abstract void SetPlayerPosition(Vector3 WorldPosition, Quaternion WorldRotation);

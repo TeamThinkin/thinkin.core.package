@@ -27,13 +27,16 @@ public class DispenserElementPresenter : ElementPresenterBase
     [SerializeField] protected float ItemSize = 1;
     [SerializeField] protected int RowCount = 3;
     [SerializeField] protected Vector3 JitterScale = Vector3.one;
-    [SerializeField] protected float Scroll;
     [SerializeField] protected float ScrollMargin;
 
     [SerializeField] protected PhysicMaterial DefaultMaterial;
     public PhysicMaterial DefaultPhysicsMaterial => DefaultMaterial;
 
-    public bool IsPolar; //TODO: temp item
+    public float Scroll;
+    public int ItemCounter;
+
+    public event System.Action OnUserInput;
+    public event System.Action<GameObject, ItemInfo> OnItemDispensed;
 
     protected string src;
     protected string title;
@@ -41,8 +44,6 @@ public class DispenserElementPresenter : ElementPresenterBase
     protected ItemInfo[] items;
     protected float minScroll;
     protected float maxScroll;
-
-    //private DispenserSync sync;//TODO: remove this once the refactor is complete
 
     public override void ParseDataElement(IElement ElementData)
     {
@@ -59,11 +60,6 @@ public class DispenserElementPresenter : ElementPresenterBase
 
         if (!string.IsNullOrEmpty(src))
         {
-            //var address = new AssetUrl(src);
-            //var request = UnityEngine.Networking.UnityWebRequestAssetBundle.GetAssetBundle(address.CatalogUrl, 0);
-            //await request.SendWebRequest().GetTask();
-            //var bundle = UnityEngine.Networking.DownloadHandlerAssetBundle.GetContent(request);
-
             var bundle = await AssetBundleManager.LoadAssetBundle(src);
             var names = bundle.GetAllAssetNames().Take(30);
 
@@ -72,22 +68,6 @@ public class DispenserElementPresenter : ElementPresenterBase
             updateLayout();
         }
     }
-
-    //TODO: remove this once the refactor is complete
-    //public override void CreateNetworkSync()
-    //{
-    //    base.CreateNetworkSync();
-
-    //    sync = DispenserSync.FindOrCreate(this);
-    //}
-
-    //TODO: remove this once the refactor is complete
-    //public void AttachNetworkSync(DispenserSync Sync)
-    //{
-    //    this.sync = Sync;
-    //}
-
-    
 
     private ItemInfo getItem(string assetName, AssetBundle bundle)
     {
@@ -161,7 +141,7 @@ public class DispenserElementPresenter : ElementPresenterBase
         var left = Scroll - width / 2;
         var right = Scroll + width / 2;
 
-        if (IsPolar)
+        if (true) //IsPolar)
         {
             var circumference = LayoutReference.localPosition.y * 2 * Mathf.PI;
             var rot = (Scroll / circumference) * 360;
@@ -177,7 +157,8 @@ public class DispenserElementPresenter : ElementPresenterBase
 
         foreach (var item in items)
         {
-            if (IsPolar) item.Instance.transform.localPosition = FromPolar(item.LocalPosition + Vector3.left * Scroll);
+            //if (IsPolar) 
+            item.Instance.transform.localPosition = FromPolar(item.LocalPosition + Vector3.left * Scroll);
             if (item.LocalPosition.x >= left && item.LocalPosition.x <= right)
             {
                 var leftScale = item.LocalPosition.x.Remap(left, left + ItemSize, 0, 1, true);
@@ -226,8 +207,8 @@ public class DispenserElementPresenter : ElementPresenterBase
             jitter = Random.insideUnitSphere;
             jitter.Scale(JitterScale * ItemSize);
             item.LocalPosition = new Vector3(i * ItemSize, y, 0) + jitter;
-            
-            item.Instance.transform.localPosition = IsPolar ? FromPolar(item.LocalPosition) : item.LocalPosition;
+
+            item.Instance.transform.localPosition = FromPolar(item.LocalPosition); //IsPolar ? FromPolar(item.LocalPosition) : item.LocalPosition;
             item.Instance.transform.localScale = ItemSize * Vector3.one;
         }
 
@@ -247,5 +228,13 @@ public class DispenserElementPresenter : ElementPresenterBase
         );
     }
 
-    
+    protected void FireOnUserInput()
+    {
+        OnUserInput?.Invoke();
+    }
+
+    public void FireOnItemDispensed(GameObject Item, ItemInfo Info)
+    {
+        OnItemDispensed?.Invoke(Item, Info);
+    }
 }

@@ -49,15 +49,9 @@ public static class ElementPresenterFactory
                     };
 
                     if (Presenters.ContainsKey(presenterAttribute.Tag))
-                    {
-                        Debug.Log("We already have this one: " + presenterAttribute.Tag);
                         Presenters[presenterAttribute.Tag] = presenterInfo;
-                    }
                     else
-                    {
-
                         Presenters.Add(presenterAttribute.Tag, presenterInfo);
-                    }
                 }
                 else Debug.LogError("Invalid prefab path for IContentPresenter (" + type.Name + "): " + presenterAttribute.PrefabPath);
             }

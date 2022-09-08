@@ -109,7 +109,6 @@ public static class DeviceRegistrationController
             if (address.ToString() != "")
             {
                 macAdress = address.ToString();
-                Debug.Log("Mac Address retrieved: " + macAdress);
                 return macAdress;
             }
         }
