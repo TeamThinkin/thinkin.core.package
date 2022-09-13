@@ -41,12 +41,8 @@ public class PortalElementPresenter : ElementPresenterBase, IHandlePointerEvent
     }    
 
     public override async Task Initialize()
-    {
-        bool IsSymbolic = false; //TODO: figure out what to do with the symbol thing
-    
-        HasVisual = !IsSymbolic;
-
-        if (IsSymbolic) return;
+    {    
+        HasVisual = true;
 
         switch (DisplayType)
         {

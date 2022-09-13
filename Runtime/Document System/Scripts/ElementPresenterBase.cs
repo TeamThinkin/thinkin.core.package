@@ -20,8 +20,6 @@ public abstract class ElementPresenterBase : MonoBehaviour, IElementPresenter
 
     public abstract void ParseDataElement(IElement ElementData);
 
-    //public virtual void CreateNetworkSync() { return; } //TODO: remove this once the refactor is complete
-
     public void AddDOMChild(IElementPresenter Child)
     {
         children.Add(Child);

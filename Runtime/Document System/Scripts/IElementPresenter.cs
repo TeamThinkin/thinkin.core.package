@@ -23,6 +23,4 @@ public interface IElementPresenter
     void ParseDataElement(IElement ElementData);
 
     void SetDOMParent(IElementPresenter ParentElement);
-
-    //void CreateNetworkSync(); //TODO: remove this once the refactor is complete
 }
