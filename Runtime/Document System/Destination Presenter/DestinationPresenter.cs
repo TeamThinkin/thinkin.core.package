@@ -45,7 +45,6 @@ public class DestinationPresenter : MonoBehaviour
         CurrentDestinationId = newRoomId;
 
         var documentTask = DocumentManager.FetchDocument(Url);
-        //var presenceTask = DocumentManager.FetchPresenceInfo(Url);
 
         await _transitionController.HideScene();
         
@@ -55,11 +54,9 @@ public class DestinationPresenter : MonoBehaviour
         _contentContainer.ClearChildren();
 
         var document = await documentTask;
-        //await Task.WhenAll(documentTask, presenceTask);
-        //var document = documentTask.Result;
-        //CurrentPresenceInfo = presenceTask.Result;
-        
-        await loadDocument(document);
+        //await loadDocument(document);
+        RootPresenter = await DocumentManager.LoadDocumentIntoContainer(document, _contentContainer, false);
+
         CurrentUrl = Url;
         OnDestinationLoaded?.Invoke();
         _transitionController.RevealScene();
@@ -86,32 +83,32 @@ public class DestinationPresenter : MonoBehaviour
         playerBody.isKinematic = false;
     }
 
-    private async Task loadDocument(IDocument Document)
-    {
-        RootPresenter = ElementPresenterFactory.Instantiate(typeof(RootPresenter), Document.DocumentElement, null);
-        RootPresenter.transform.SetParent(_contentContainer);
-        RootPresenter.gameObject.name = "Root";
+    //private async Task loadDocument(IDocument Document)
+    //{
+    //    RootPresenter = ElementPresenterFactory.Instantiate(typeof(RootPresenter), Document.DocumentElement, null);
+    //    RootPresenter.transform.SetParent(_contentContainer);
+    //    RootPresenter.gameObject.name = "Root";
 
-        traverseDOMforPresenters(Document.DocumentElement, RootPresenter);
+    //    traverseDOMforPresenters(Document.DocumentElement, RootPresenter);
         
-        bool hasEnviornment = RootPresenter.All().Any(i => i is EnvironmentElementPresenter);
-        if(!hasEnviornment) await AppSceneManager.LoadLocalScene("Empty Room");
+    //    bool hasEnviornment = RootPresenter.All().Any(i => i is EnvironmentElementPresenter);
+    //    if(!hasEnviornment) await AppSceneManager.LoadLocalScene("Empty Room");
         
-        await Task.WhenAll(RootPresenter.All().Select(i => i.Initialize()));
-    }
+    //    await Task.WhenAll(RootPresenter.All().Select(i => i.Initialize()));
+    //}
 
-    private static void traverseDOMforPresenters(IElement dataElement, IElementPresenter parentPresenter, int depth = 0)
-    {
-        IElementPresenter currentPresenter = null;
+    //private static void traverseDOMforPresenters(IElement dataElement, IElementPresenter parentPresenter, int depth = 0)
+    //{
+    //    IElementPresenter currentPresenter = null;
 
-        if (ElementPresenterFactory.HasTag(dataElement.TagName))
-        {
-            currentPresenter = ElementPresenterFactory.Instantiate(dataElement, parentPresenter);
-        }
+    //    if (ElementPresenterFactory.HasTag(dataElement.TagName))
+    //    {
+    //        currentPresenter = ElementPresenterFactory.Instantiate(dataElement, parentPresenter);
+    //    }
 
-        foreach (var child in dataElement.Children)
-        {
-            traverseDOMforPresenters(child, currentPresenter ?? parentPresenter, depth + 1);
-        }
-    }
+    //    foreach (var child in dataElement.Children)
+    //    {
+    //        traverseDOMforPresenters(child, currentPresenter ?? parentPresenter, depth + 1);
+    //    }
+    //}
 }

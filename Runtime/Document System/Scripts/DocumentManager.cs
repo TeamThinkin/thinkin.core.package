@@ -11,43 +11,6 @@ using UnityEngine.Networking;
 
 public static class DocumentManager
 {
-    //public const string BROWSER_KEY = "775d447b-8333-42bc-882b-6926d91a14ae";
-
-    //public struct PresenceInfoDto
-    //{
-    //    [JsonProperty("provider")]
-    //    public string Provider { get; set; }
-
-    //    [JsonProperty("key")]
-    //    public string Key { get; set; }
-    //}
-
-    //public static async Task<PresenceInfoDto> FetchPresenceInfo(string BaseUrl)
-    //{
-    //    var url = new Uri(new Uri(BaseUrl), "/api/presence").AbsoluteUri;
-    //    Debug.Log("Presence info url: " + url);
-
-    //    using (var request = new UnityWebRequest(url, "GET"))
-    //    {
-    //        request.SetRequestHeader("Browser-Key", BROWSER_KEY);
-    //        request.SetRequestHeader("User-Agent", "Thinkin/" + Application.version);
-    //        if (UserInfo.CurrentUser != null) request.SetRequestHeader("auth", UserInfo.CurrentUser.AuthToken);
-    //        request.downloadHandler = new DownloadHandlerBuffer();
-
-    //        await request.SendWebRequest().GetTask();
-
-    //        if (request.result != UnityWebRequest.Result.Success)
-    //        {
-    //            Debug.LogError("Presence Request error: " + request.error);
-    //            return new PresenceInfoDto();
-    //        }
-    //        else
-    //        {
-    //            return JsonConvert.DeserializeObject<PresenceInfoDto>(request.downloadHandler.text);
-    //        }
-    //    }
-    //}
-
     public static async Task<IDocument> FetchDocument(string Url)
     {
         var source = await getRequest(Url);
@@ -58,6 +21,59 @@ public static class DocumentManager
         return document;
     }
 
+    public static async Task<IElementPresenter> LoadDocumentIntoContainer(string Url, Transform ContentContainer, bool DisableEnvironemtPresenter = true)
+    {
+        var doc = await FetchDocument(Url);
+        return await LoadDocumentIntoContainer(doc, ContentContainer, DisableEnvironemtPresenter);
+    }
+
+    public static async Task<IElementPresenter> LoadDocumentIntoContainer(IDocument Document, Transform ContentContainer, bool DisableEnvironemtPresenter = true)
+    {
+        var rootPresenter = ElementPresenterFactory.Instantiate(typeof(RootPresenter), Document.DocumentElement, null);
+        rootPresenter.SetDOMParent(ContentContainer.GetComponentInParent<IElementPresenter>());
+        rootPresenter.transform.SetParent(ContentContainer);
+        rootPresenter.gameObject.name = "Root";
+        rootPresenter.transform.Reset();
+
+        traverseDOMforPresenters(Document.DocumentElement, rootPresenter);
+
+        var presentersQuery = rootPresenter.All();
+        if(DisableEnvironemtPresenter) presentersQuery = presentersQuery.Where(i => i is not EnvironmentElementPresenter);
+
+        if (!DisableEnvironemtPresenter)
+        {
+            bool hasEnviornment = rootPresenter.All().Any(i => i is EnvironmentElementPresenter);
+            if (!hasEnviornment) await AppSceneManager.LoadLocalScene("Empty Room");
+        }
+
+        await Task.WhenAll(presentersQuery.Select(i => i.Initialize()));
+
+        rootPresenter.ExecuteLayout();
+
+        return rootPresenter;
+    }
+
+    public static async Task<IHtmlCollection<IElement>> FetchDocumentMeta(string Url)
+    {
+        var doc = await FetchDocument(Url);
+        return doc.QuerySelectorAll("meta");
+    }
+
+    private static void traverseDOMforPresenters(IElement dataElement, IElementPresenter parentPresenter, int depth = 0)
+    {
+        IElementPresenter currentPresenter = null;
+
+        if (ElementPresenterFactory.HasTag(dataElement.TagName))
+        {
+            currentPresenter = ElementPresenterFactory.Instantiate(dataElement, parentPresenter);
+        }
+
+        foreach (var child in dataElement.Children)
+        {
+            traverseDOMforPresenters(child, currentPresenter ?? parentPresenter, depth + 1);
+        }
+    }
+
     private static async Task<string> getRequest(string Url)
     {
         Debug.Log("Get request url: " + Url);
@@ -65,7 +81,6 @@ public static class DocumentManager
         {
             request.SetRequestHeader("User-Agent", "Thinkin/" + Application.version);
             request.SetRequestHeader("Accept", "text/intervrse");
-            //if (UserInfo.CurrentUser != null) request.SetRequestHeader("auth", UserInfo.CurrentUser.AuthToken); //TODO: reevaluate how to handle user authentication here
             request.downloadHandler = new DownloadHandlerBuffer();
 
             await request.SendWebRequest().GetTask();

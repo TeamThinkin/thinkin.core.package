@@ -6,24 +6,22 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 [ElementPresenter("portal", "Presenters/Portal/Portal", false)]
-public class PortalElementPresenter : ElementPresenterBase, IHandlePointerEvent
+public class PortalElementPresenter : ElementPresenterBase
 {
     public enum DisplayTypeEnum
     {
         Default,
+        Door,
+        PreviewOrb,
         Hidden
     }
 
-    [SerializeField] private TMPro.TMP_Text Label;
-    [SerializeField] private Animator StateAnimator;
-    [SerializeField] private GameObject DoorVisual;
-    [SerializeField] private BoxCollider Collider;
+    [SerializeField] private GameObject[] DisplayPrefabs; //NOTE: the order of this array is expected to match the order of values in the DisplayTypeEnum
 
     private bool isLocalDestination;
     private Vector3? localDestinationPosition;
     private Vector3? localDestinationEuler;
-
-    public bool HasVisual { get; private set; }
+    private PortalSubPresenter subPresenter;
 
     public string Title { get; private set; }
     public string Href { get; private set; }
@@ -32,30 +30,47 @@ public class PortalElementPresenter : ElementPresenterBase, IHandlePointerEvent
 
     public override void ParseDataElement(IElement ElementData)
     {
-        Label.text = Title = ElementData.Attributes["title"].Value;
+        Title = ElementData.Attributes["title"].Value;
         Placement = GetPlacementInfo(ElementData);
         DisplayType = GetEnumFromAttribute<DisplayTypeEnum>(ElementData.Attributes["type"]);
-        Href = TransformRelativeUrlToAbsolute(ElementData.Attributes["href"].Value, ElementData);
+        
+        //Href = TransformRelativeUrlToAbsolute(ElementData.Attributes["href"].Value, ElementData);
+        Href = ElementData.Attributes["href"].Value.TransformRelativeUrlToAbsolute(ElementData);
 
         ApplyPlacement(Placement, transform);
     }    
 
     public override async Task Initialize()
-    {    
-        HasVisual = true;
+    {
+        int displayIndex = (int)DisplayType - 1;
+        if (displayIndex == -1) displayIndex = 0;
+        if (displayIndex < DisplayPrefabs.Length) subPresenter = Instantiate(DisplayPrefabs[displayIndex])?.GetComponent<PortalSubPresenter>();
 
-        switch (DisplayType)
+        if(subPresenter != null)
         {
-            case DisplayTypeEnum.Hidden:
-                DoorVisual.SetActive(false);
-                Collider.size = Vector3.one;
-                Collider.center = Vector3.zero;
-                break;
-            default:
-                break;
+            subPresenter.transform.SetParent(this.transform);
+            subPresenter.transform.Reset();
+            subPresenter.Initialize(this);
         }
 
         parseHref();
+    }
+
+    public override void ExecuteLayout()
+    {
+        base.ExecuteLayout();
+        var subBounds = subPresenter.GetBoundingBox();
+        if(subBounds.HasValue)
+        {
+            var v = subBounds.Value;
+            v.center += subPresenter.transform.localPosition;
+
+            var size = v.size;
+            size.Scale(subPresenter.transform.localScale);
+            size.Scale(transform.localScale);
+            v.size = size;
+            BoundingBox = v;
+        }
     }
 
     private void parseHref()
@@ -83,10 +98,10 @@ public class PortalElementPresenter : ElementPresenterBase, IHandlePointerEvent
                     if (endBrace > -1)
                     {
                         chunk = hash.Substring(startBrace, endBrace - startBrace + 1);
-                        if(i == 0)
-                            localDestinationPosition = parseVector3String(chunk);
-                        else if(i == 1)
-                            localDestinationEuler = parseVector3String(chunk);
+                        if (i == 0)
+                            localDestinationPosition = chunk.ToVector3(); // parseVector3String(chunk);
+                        else if (i == 1)
+                            localDestinationEuler = chunk.ToVector3(); // parseVector3String(chunk);
                     }
                     else break;
                 }
@@ -98,46 +113,7 @@ public class PortalElementPresenter : ElementPresenterBase, IHandlePointerEvent
         }
     }
 
-    private Vector3? parseVector3String(string text)
-    {
-        // Assumed format: {0.1,0.2,0.3}
-        try
-        {
-            text = text.Trim();
-            text = text.Substring(1, text.Length - 2);
-            var pieces = text.Split(',');
-            var x = float.Parse(pieces[0].Trim());
-            var y = float.Parse(pieces[1].Trim());
-            var z = float.Parse(pieces[2].Trim());
-            return new Vector3(x, y, z);
-        }
-        catch(System.Exception ex)
-        {
-            Debug.LogError("Invalid vector string (Expecting {0.1,0.2,0.3}): " + text);
-            return null;
-        }
-    }
-
-
-    public void OnHoverStart(IUIPointer Sender, RaycastHit RayInfo)
-    {
-        StateAnimator.SetBool("Is Partially Open", true);
-    }
-
-    public void OnHoverEnd(IUIPointer Sender)
-    {
-        if(StateAnimator != null) StateAnimator.SetBool("Is Partially Open", false);
-    }
-
-    public void OnGripStart(IUIPointer Sender, RaycastHit RayInfo)
-    {
-    }
-
-    public void OnGripEnd(IUIPointer Sender)
-    {
-    }
-
-    public void OnTriggerStart(IUIPointer Sender, RaycastHit RayInfo)
+    public async Task ActivatePortal()
     {
         if (isLocalDestination)
         {
@@ -147,11 +123,7 @@ public class PortalElementPresenter : ElementPresenterBase, IHandlePointerEvent
         }
         else
         {
-            DestinationPresenter.Instance.DisplayUrl(Href);
+            await DestinationPresenter.Instance.DisplayUrl(Href);
         }
-    }
-
-    public void OnTriggerEnd(IUIPointer Sender)
-    {
     }
 }

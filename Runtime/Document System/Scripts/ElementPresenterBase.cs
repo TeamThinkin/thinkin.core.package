@@ -3,11 +3,12 @@ using AngleSharp.XPath;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 
 
-public abstract class ElementPresenterBase : MonoBehaviour, IElementPresenter
+public abstract class ElementPresenterBase : MonoBehaviour, IElementPresenter, ILayoutItem
 {
     [SerializeField] GameObject _SceneChildContainer;
     
@@ -17,6 +18,10 @@ public abstract class ElementPresenterBase : MonoBehaviour, IElementPresenter
     public IEnumerable<IElementPresenter> DOMChildren => children;
 
     public GameObject SceneChildrenContainer => _SceneChildContainer;
+
+    public virtual Bounds? BoundingBox { get; protected set; }
+
+    public virtual ILayoutContainerInfo LayoutContainerInfo { get; protected set; }
 
     public abstract void ParseDataElement(IElement ElementData);
 
@@ -32,6 +37,24 @@ public abstract class ElementPresenterBase : MonoBehaviour, IElementPresenter
     }
 
     public abstract Task Initialize();
+
+    public virtual void ExecuteLayout() 
+    {
+        LayoutContainerInfo = DOMParent?.LayoutContainerInfo;
+        BoundingBox = DOMParent?.BoundingBox;
+        foreach (var layoutItem in LayoutChildren)
+        {
+            layoutItem.ExecuteLayout();
+        }
+    }
+
+    protected IEnumerable<ILayoutItem> LayoutChildren
+    {
+        get
+        {
+            return SceneChildrenContainer.transform.GetChildren().Select(i => i.GetComponent<ILayoutItem>()).WhereNotNull();
+        }
+    }
 
     public void RemoveDOMChild(IElementPresenter Child)
     {
@@ -94,10 +117,18 @@ public abstract class ElementPresenterBase : MonoBehaviour, IElementPresenter
         if (PresenterDataElement == null) return new PlacementInfo();
 
         var placementInfo = new PlacementInfo();
-        placementInfo.Position = GetVectorFromElement(PresenterDataElement.SelectSingleNode("placement/position") as IElement);
-        placementInfo.Rotation = GetQuaternionFromElement(PresenterDataElement.SelectSingleNode("placement/rotation") as IElement);
-        placementInfo.Scale = GetVectorFromElement(PresenterDataElement.SelectSingleNode("placement/scale") as IElement);
-        placementInfo.Size = GetFloatFromElement(PresenterDataElement.SelectSingleNode("placement/size") as IElement);
+
+        placementInfo.Position = PresenterDataElement.GetAttribute("position").ToVector3();
+        if(!placementInfo.Position.HasValue) placementInfo.Position = GetVectorFromElement(PresenterDataElement.SelectSingleNode("placement/position") as IElement);
+
+        placementInfo.Rotation = PresenterDataElement.GetAttribute("rotation").ToQuaternion();
+        if(!placementInfo.Rotation.HasValue) placementInfo.Rotation = GetQuaternionFromElement(PresenterDataElement.SelectSingleNode("placement/rotation") as IElement);
+
+        placementInfo.Scale = PresenterDataElement.GetAttribute("scale").ToVector3();
+        if(!placementInfo.Scale.HasValue) placementInfo.Scale = GetVectorFromElement(PresenterDataElement.SelectSingleNode("placement/scale") as IElement);
+
+        placementInfo.Size = PresenterDataElement.GetAttribute("size").ToFloat();
+        if(!placementInfo.Size.HasValue) placementInfo.Size = GetFloatFromElement(PresenterDataElement.SelectSingleNode("placement/size") as IElement);
         return placementInfo;
     }
 
@@ -143,20 +174,18 @@ public abstract class ElementPresenterBase : MonoBehaviour, IElementPresenter
 
         T value;
 
-        if (Enum.TryParse<T>(attribute?.Value, out value))
+        string text = attribute?.Value;
+        text = text?.Replace("-", "");
+
+        if (Enum.TryParse<T>(text, true, out value))
             return value;
         else
             return default(T);
     }
 
-    public static string TransformRelativeUrlToAbsolute(string RelativeUrl, IElement ElementData)
+    public Bounds? GetBounds()
     {
-        return TransformRelativeUrlToAbsolute(RelativeUrl, ElementData.BaseUri);
-    }
-
-    public static string TransformRelativeUrlToAbsolute(string RelativeUrl, string BaseUrl)
-    {
-        return new Uri(new Uri(BaseUrl), RelativeUrl).AbsoluteUri;
+        return BoundingBox;
     }
 }
 

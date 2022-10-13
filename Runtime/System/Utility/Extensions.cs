@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using AngleSharp.Dom;
+using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -145,6 +146,14 @@ public static class Extensions
         return vector;
     }
 
+    public static Vector3 Divide(this Vector3 left, Vector3 right)
+    {
+        left.x /= right.x;
+        left.y /= right.y;
+        left.z /= right.z;
+        return left;
+    }
+
     public static void Print(this Vector3 vector, string prefix = null)
     {
         Debug.Log(prefix + vector.x.ToString("0.0000") + ", " + vector.y.ToString("0.0000") + ", " + vector.z.ToString("0.0000"));
@@ -222,6 +231,126 @@ public static class Extensions
         {
             Item = Item.transform.parent.gameObject;
             yield return Item;
+        }
+    }
+
+    public static string TransformRelativeUrlToAbsolute(this string RelativeUrl, IElement ElementData)
+    {
+        return TransformRelativeUrlToAbsolute(RelativeUrl, ElementData.BaseUri);
+    }
+
+    public static string TransformRelativeUrlToAbsolute(this string RelativeUrl, string BaseUrl)
+    {
+        return new Uri(new Uri(BaseUrl), RelativeUrl).AbsoluteUri;
+    }
+
+    public static T? ToEnum<T>(this string text) where T : struct
+    {
+        if (text == null) return null;
+
+        text = text?.Replace("-", "");
+
+        if (Enum.TryParse<T>(text, true, out T value))
+            return value;
+        else
+            return null;
+    }
+
+    public static float? ToFloat(this string text)
+    {
+        if (text == null) return null;
+
+        if (float.TryParse(text.Trim(), out float value))
+            return value;
+        else
+            return null;
+
+    }
+
+    public static Vector3? ToVector3(this string text)
+    {
+        // Assumed format: {0.1,0.2,0.3}
+        if (text == null) return null;
+
+        try
+        {
+            text = text.Trim();
+
+            if (text.Length <= 2 || text[0] != '{')
+            {
+                Debug.LogError("Invalid vector string (Expecting {0.1,0.2,0.3}): " + text);
+                return null;
+            }
+
+            text = text.Substring(1, text.Length - 2);
+            var pieces = text.Split(',');
+
+            if (pieces.Length < 3)
+            {
+                Debug.LogError("Invalid vector string (Expecting {0.1,0.2,0.3}): " + text);
+                return null;
+            }
+
+            var x = float.Parse(pieces[0].Trim());
+            var y = float.Parse(pieces[1].Trim());
+            var z = float.Parse(pieces[2].Trim());
+            return new Vector3(x, y, z);
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError("Invalid vector string (Expecting {0.1,0.2,0.3}): " + text);
+            return null;
+        }
+    }
+
+    public static Quaternion? ToQuaternion(this string text)
+    {
+        // Assumed format: {0.1,0.2,0.3} OR {0.1,0.2,0.3,0.4}
+        if (text == null) return null;
+
+        try
+        {
+            text = text.Trim();
+
+            if (text.Length <= 3 || text[0] != '{')
+            {
+                Debug.LogError("Invalid vector string (Expecting {0.1,0.2,0.3,0.4}): " + text);
+                return null;
+            }
+
+            text = text.Substring(1, text.Length - 2);
+            var pieces = text.Split(',');
+
+            if (pieces.Length < 3)
+            {
+                Debug.LogError("Invalid vector string (Expecting {0.1,0.2,0.3} or {0.1,0.2,0.3,0.4}): " + text);
+                return null;
+            }
+
+            if(pieces.Length == 4)
+            {
+                return new Quaternion(
+                    float.Parse(pieces[0].Trim()),
+                    float.Parse(pieces[1].Trim()),
+                    float.Parse(pieces[2].Trim()),
+                    float.Parse(pieces[3].Trim())
+                );
+            }
+            else
+            {
+                return Quaternion.Euler(
+                    float.Parse(pieces[0].Trim()),
+                    float.Parse(pieces[1].Trim()),
+                    float.Parse(pieces[2].Trim())
+                );
+            }
+
+            
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError("Invalid quaternion string (Expecting {0.1,0.2,0.3,0.4}): " + text);
+            return null;
         }
     }
 }

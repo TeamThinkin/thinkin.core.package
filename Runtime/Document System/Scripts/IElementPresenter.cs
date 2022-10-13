@@ -9,10 +9,11 @@ public interface IElementPresenter
     GameObject gameObject { get; }
     Transform transform { get; }
 
-    //IElement ElementData { get; }
     IElementPresenter DOMParent { get; }
     IEnumerable<IElementPresenter> DOMChildren { get; }
     GameObject SceneChildrenContainer { get; }
+    Bounds? BoundingBox { get; }
+    ILayoutContainerInfo LayoutContainerInfo { get; }
 
     void AddDOMChild(IElementPresenter Child);
     void AddDOMChildren(IEnumerable<IElementPresenter> Children);
@@ -20,6 +21,7 @@ public interface IElementPresenter
     void RemoveDOMChildren(IEnumerable<IElementPresenter> Children);
 
     Task Initialize();
+    void ExecuteLayout();
     void ParseDataElement(IElement ElementData);
 
     void SetDOMParent(IElementPresenter ParentElement);
