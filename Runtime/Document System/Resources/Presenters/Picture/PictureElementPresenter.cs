@@ -34,6 +34,8 @@ public class PictureElementPresenter : ElementPresenterBase
 
     public override async Task Initialize()
     {
+        await base.Initialize();
+
         var material = await GetImageMaterial(src);
         if (material != null && gameObject != null) //Bail out if the object has been destroyed while we were waiting to retrieve the image)
         {

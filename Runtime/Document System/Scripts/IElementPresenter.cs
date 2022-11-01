@@ -19,6 +19,7 @@ public interface IElementPresenter
     void AddDOMChildren(IEnumerable<IElementPresenter> Children);
     void RemoveDOMChild(IElementPresenter Child);
     void RemoveDOMChildren(IEnumerable<IElementPresenter> Children);
+    IElementPresenter GetRootParent();
 
     Task Initialize();
     void ExecuteLayout();

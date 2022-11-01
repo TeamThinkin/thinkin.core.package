@@ -6,6 +6,8 @@ public abstract class AppControllerBase : MonoBehaviour
 {
     public static AppControllerBase Instance { get; private set; }
 
+    public TabletOptions TabletSettings;
+
     public abstract Transform PlayerTransform { get; }
     public abstract Rigidbody PlayerBody { get; }
     public abstract Camera MainCamera { get; }

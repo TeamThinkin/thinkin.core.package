@@ -10,8 +10,4 @@ public class RootPresenter : ElementPresenterBase
     public override void ParseDataElement(IElement ElementData)
     {
     }
-
-    public override async Task Initialize()
-    {
-    }
 }

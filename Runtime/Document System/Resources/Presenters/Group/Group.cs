@@ -11,8 +11,4 @@ public class Group : ElementPresenterBase
     {
         ApplyPlacement(ElementData, this.transform);
     }
-
-    public override async Task Initialize()
-    {
-    }
 }

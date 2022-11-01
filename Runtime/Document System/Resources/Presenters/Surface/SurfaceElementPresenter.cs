@@ -19,18 +19,13 @@ public class SurfaceElementPresenter : ElementPresenterBase
         }
     }
 
-    private void Awake()
+    override protected void Awake()
     {
         layoutSurface = new LayoutSurface() { Bounds = new Bounds(Vector3.zero, new Vector3(ReferenceSurface.localScale.x, ReferenceSurface.localScale.y, ReferenceSurface.localScale.z)) };
-        Debug.Log("Surface bounds set based on reference surface (Awake): ");
     }
 
     public override void ParseDataElement(IElement ElementData)
     {
         //TODO: get parameters from element data
-    }
-
-    public override async Task Initialize()
-    {
     }
 }

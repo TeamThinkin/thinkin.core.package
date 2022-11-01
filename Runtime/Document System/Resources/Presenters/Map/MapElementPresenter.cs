@@ -16,13 +16,4 @@ public class MapElementPresenter : ElementPresenterBase
             portal.SetAttribute("type", "PreviewOrb");
         }
     }
-
-    public override async Task Initialize()
-    {
-    }
-
-    //public override void ExecuteLayout()
-    //{
-    //    base.ExecuteLayout();
-    //}
 }

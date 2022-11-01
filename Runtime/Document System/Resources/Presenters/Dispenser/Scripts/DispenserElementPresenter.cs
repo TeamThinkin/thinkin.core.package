@@ -54,6 +54,8 @@ public class DispenserElementPresenter : ElementPresenterBase
 
     public override async Task Initialize()
     {
+        await base.Initialize();
+
         Label.text = title;
         ApplyPlacement(placement, this.transform);
         ContentContainer.ClearChildren();

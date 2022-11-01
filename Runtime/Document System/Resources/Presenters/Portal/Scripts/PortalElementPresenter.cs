@@ -42,6 +42,8 @@ public class PortalElementPresenter : ElementPresenterBase
 
     public override async Task Initialize()
     {
+        await base.Initialize();
+
         int displayIndex = (int)DisplayType - 1;
         if (displayIndex == -1) displayIndex = 0;
         if (displayIndex < DisplayPrefabs.Length) subPresenter = Instantiate(DisplayPrefabs[displayIndex])?.GetComponent<PortalSubPresenter>();

@@ -10,8 +10,8 @@ using UnityEngine;
 
 public abstract class ElementPresenterBase : MonoBehaviour, IElementPresenter, ILayoutItem
 {
-    [SerializeField] GameObject _SceneChildContainer;
-    
+    [SerializeField] private GameObject _SceneChildContainer;
+
     public IElementPresenter DOMParent { get; private set; }
 
     protected List<IElementPresenter> children = new List<IElementPresenter>();
@@ -25,6 +25,14 @@ public abstract class ElementPresenterBase : MonoBehaviour, IElementPresenter, I
 
     public abstract void ParseDataElement(IElement ElementData);
 
+    protected virtual void Awake()
+    {
+        if (transform.parent != null)
+        {
+            DOMParent = transform.parent.GetComponentInParent<IElementPresenter>(); //NOTE: GetComponentInParent's name is a misnomer and will also match THIS object
+        }
+    }
+
     public void AddDOMChild(IElementPresenter Child)
     {
         children.Add(Child);
@@ -36,7 +44,15 @@ public abstract class ElementPresenterBase : MonoBehaviour, IElementPresenter, I
         foreach(var child in Children) AddDOMChild(child);
     }
 
-    public abstract Task Initialize();
+    public IElementPresenter GetRootParent()
+    {
+        if (DOMParent == null) 
+            return this;
+        else
+            return DOMParent.GetRootParent();
+    }
+
+    public virtual async Task Initialize() { }
 
     public virtual void ExecuteLayout() 
     {

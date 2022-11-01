@@ -9,10 +9,6 @@ public class ScrollAreaElementPresenter : ElementPresenterBase
 {
     [SerializeField] private Transform Origin;
 
-    public override async Task Initialize()
-    {
-    }
-
     public override void ParseDataElement(IElement ElementData)
     {
     }
@@ -51,7 +47,6 @@ public class ScrollAreaElementPresenter : ElementPresenterBase
 
     private void centerViewOnContents()
     {
-        Debug.Log("Scroll Area Centering View / Zoom");
         if (LayoutContainerInfo == null) return;
 
         var layoutSurface = DOMParent.LayoutContainerInfo as LayoutSurface;
@@ -61,7 +56,6 @@ public class ScrollAreaElementPresenter : ElementPresenterBase
             return;
         }
         var fitBox = layoutSurface.Bounds;
-        Debug.Log("Scroll Area fitBox: " + fitBox);
 
         var ratio = BoundingBox.Value.size.Divide(fitBox.size);
         var maxRatio = Mathf.Max(ratio.x, ratio.y);

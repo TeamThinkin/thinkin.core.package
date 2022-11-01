@@ -19,7 +19,9 @@ public class EnvironmentElementPresenter : ElementPresenterBase
 
     public override async Task Initialize()
     {
-        switch(typeName.ToLower())
+        await base.Initialize();
+
+        switch (typeName.ToLower())
         {
             case "unity.assetbundle":
                 await AppSceneManager.LoadRemoteScene(src);

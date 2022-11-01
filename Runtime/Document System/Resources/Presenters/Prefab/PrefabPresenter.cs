@@ -17,6 +17,8 @@ public class PrefabPresenter : ElementPresenterBase
     }
     public override async Task Initialize()
     {
+        await base.Initialize();
+
         ApplyPlacement(placement, this.transform);
 
         if (!string.IsNullOrEmpty(src))
