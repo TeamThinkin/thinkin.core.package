@@ -5,4 +5,5 @@ using UnityEngine;
 public interface IUIPointer
 {
     Transform transform { get; }
+    void SetProvider(IUIPointerProvider Provider);
 }
