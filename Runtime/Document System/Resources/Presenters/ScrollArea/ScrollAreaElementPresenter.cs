@@ -56,17 +56,16 @@ public class ScrollAreaElementPresenter : ElementPresenterBase
             return;
         }
         var fitBox = layoutSurface.Bounds;
-
-        var ratio = BoundingBox.Value.size.Divide(fitBox.size);
-        var maxRatio = Mathf.Max(ratio.x, ratio.y);
-        var minRatio = Mathf.Min(ratio.x, ratio.y);
-        //var maxRatio = Mathf.Max(Mathf.Max(ratio.x, ratio.y), ratio.z);
-        //var minRatio = Mathf.Min(Mathf.Min(ratio.x, ratio.y), ratio.z);
-
-        transform.localPosition = fitBox.center;
-        Origin.localScale = 1 / maxRatio * Vector3.one;
         Origin.localPosition = -(BoundingBox.Value.center * Origin.localScale.x) + (Vector3.forward * BoundingBox.Value.extents.z * Origin.localScale.x);
-        //Origin.localPosition = -(BoundingBox.Value.center * (1 / maxRatio)) + (Vector3.forward * BoundingBox.Value.extents.z * (1 / maxRatio));
+
+        if (BoundingBox.HasValue)
+        {
+            var ratio = BoundingBox.Value.size.Divide(fitBox.size);
+            var maxRatio = Mathf.Max(ratio.x, ratio.y);
+            
+            transform.localPosition = fitBox.center;
+            Origin.localScale = 1 / maxRatio * Vector3.one;
+        }
     }
 
     private void OnDrawGizmosSelected()

@@ -47,6 +47,6 @@ public class StackPanelElementPresenter : ElementPresenterBase
                 }
             }
         }
-        this.BoundingBox = bounds.Value;
+        this.BoundingBox = bounds;
     }
 }
