@@ -4,5 +4,5 @@ using UnityEngine;
 
 public interface IUIManager 
 {
-    void MakeGrabbalbe(GameObject Item);
+    void MakeGrabbable(GameObject Item);
 }
