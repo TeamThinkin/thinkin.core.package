@@ -32,10 +32,18 @@ public class Tablet : MonoBehaviour
         foreach (var panel in AppControllerBase.Instance.TabletSettings.Panels)
         {
             var button = Instantiate(MenuButtonPrefab).GetComponent<ButtonInteractable>();
+            button.gameObject.name = "Button " + panel.DisplayName;
             button.SpriteRenderer.sprite = panel.IconSprite != null ? panel.IconSprite : DefaultPanelIconSprite;
             button.transform.SetParent(MenuContentContainer.SceneChildrenContainer.transform, false);
             button.transform.Reset();
+            button.Key = panel;
+            button.OnInteractionEvent += Button_OnInteractionEvent;
         }
+    }
+
+    private void Button_OnInteractionEvent(ButtonInteractable obj)
+    {
+        Debug.Log("Button clicked: " + obj.gameObject.name, obj.gameObject);
     }
 
     private void OnDestroy()

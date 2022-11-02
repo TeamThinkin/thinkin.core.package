@@ -21,6 +21,7 @@ public class StackPanelElementPresenter : ElementPresenterBase
 
         Bounds? bounds = null;
         Vector3 runningPosition = Vector3.zero;
+
         foreach (var layoutChild in LayoutChildren)
         {
             var childBounds = layoutChild.GetBounds();
@@ -28,7 +29,8 @@ public class StackPanelElementPresenter : ElementPresenterBase
             {
                 var localChildBounds = childBounds.Value;
                 
-                float size = Vector3.Dot(StackDirection, childBounds.Value.size);
+                float size = Mathf.Abs(Vector3.Dot(StackDirection, childBounds.Value.size));
+
                 layoutChild.transform.localPosition = runningPosition;
                 localChildBounds.center += layoutChild.transform.localPosition;
                 runningPosition += StackDirection * (size + Padding);
