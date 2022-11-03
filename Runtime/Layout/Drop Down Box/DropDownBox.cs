@@ -10,7 +10,7 @@ public class DropDownBox : MonoBehaviour, IHandlePointerEvent
     [SerializeField] private GameObject List;
     [SerializeField] private AnimationCurve ToggleAnimationCurve;
     [SerializeField] private float ToggleAnimationDuration = 1f;
-    [SerializeField] private LayoutContainer ListItemsContainer;
+    [SerializeField] private ElementPresenterBase ListItemsContainer;
     [SerializeField] private TMPro.TMP_Text SelectedLabel;
     [SerializeField] private GameObject ListItemPrefab;
     [SerializeField] private Transform ListBackground;
