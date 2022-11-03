@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-
+using UnityEngine.Events;
 
 public class ButtonInteractable : MonoBehaviour, IHandlePointerEvent
 {
@@ -24,13 +24,14 @@ public class ButtonInteractable : MonoBehaviour, IHandlePointerEvent
 
     public SpriteRenderer SpriteRenderer => _SpriteRenderer;
 
-    //[Space]
-    //[SerializeField] protected UnityHandEvent OnPressed;
-    //[SerializeField] protected UnityHandEvent OnUnpressed;
-
     public event Action<ButtonInteractable> OnInteractionEvent;
+    public UnityEvent OnInteractionUnityEvent;
+
     public event Action<ButtonInteractable> OnPressedEvent;
+    public UnityEvent OnPressedUnityEvent;
+
     public event Action<ButtonInteractable> OnUnpressedEvent;
+    public UnityEvent OnUnpressedUnityEvent;
 
     protected Material InactiveMaterial;
 
@@ -74,6 +75,7 @@ public class ButtonInteractable : MonoBehaviour, IHandlePointerEvent
         else if (!_isPressed) Pressed();
 
         OnInteractionEvent?.Invoke(this);
+        OnInteractionUnityEvent.Invoke();
     }
 
     protected virtual void onInteractionEnd()
@@ -87,8 +89,8 @@ public class ButtonInteractable : MonoBehaviour, IHandlePointerEvent
 
         IsPressed = true;
         AudioPlayer?.PlayOneShot(PressedAudio);
-        //OnPressed?.Invoke();
         OnPressedEvent?.Invoke(this);
+        OnPressedUnityEvent?.Invoke();
     }
 
     protected virtual void Released()
@@ -99,6 +101,7 @@ public class ButtonInteractable : MonoBehaviour, IHandlePointerEvent
         AudioPlayer?.PlayOneShot(UnpressedAudio);
         //OnUnpressed?.Invoke();
         OnUnpressedEvent?.Invoke(this);
+        OnUnpressedUnityEvent.Invoke();
     }
 
     private void updateState()
@@ -106,28 +109,6 @@ public class ButtonInteractable : MonoBehaviour, IHandlePointerEvent
         Visuals.localPosition = IsPressed ? PressOffset : Vector3.zero;
         if (BackgroundRenderer != null) BackgroundRenderer.sharedMaterial = _isPressed ? ActiveMaterial : InactiveMaterial;
     }
-
-    //#region -- Touch Events --
-    //protected override void OnTouch(Hand hand, Collision collision)
-    //{
-    //    base.OnTouch(hand, collision);
-    //    return;
-
-    //    if (IsPhysicalHandInteractionsDisabled) return;
-    //    if (!collision.InvolvesPrimaryFingerTip()) return; //Only accept input from pointer finger tips to hopefully filter out accidental touches
-
-    //    onInteractionStart(hand);
-    //}
-
-    //protected override void OnUntouch(Hand hand, Collision collision)
-    //{
-    //    base.OnUntouch(hand, collision);
-    //    return;
-
-    //    if (IsPhysicalHandInteractionsDisabled) return;
-    //    onInteractionEnd(hand);
-    //}
-    //#endregion
 
     #region -- Pointer Events --
     public void OnTriggerStart(IUIPointer Sender, RaycastHit RayInfo)

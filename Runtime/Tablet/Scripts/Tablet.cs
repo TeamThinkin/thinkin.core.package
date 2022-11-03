@@ -5,28 +5,22 @@ using UnityEngine;
 public class Tablet : MonoBehaviour
 {
     [SerializeField] private ElementPresenterBase MenuContentContainer;
+    [SerializeField] private ElementPresenterBase PanelContainer;
     [SerializeField] private TMPro.TMP_Text BuildLabel;
     [SerializeField] private Sprite DefaultPanelIconSprite;
-
     [SerializeField] private ButtonInteractable MenuButtonPrefab;
-    [SerializeField] private Transform PanelContainer;
 
-    //TODO: commented out during the Package refactor
-    //private TabletNetworkSync networkSync;
+    private TabPanel currentPanel;
 
     private void Start()
     {
-        createNetworkSync();
-        AppSceneManager.OnEnvironmentUnloaded += AppSceneManager_OnEnvironmentUnloaded;
+        //AppSceneManager.OnEnvironmentUnloaded += AppSceneManager_OnEnvironmentUnloaded;
 
-        loadContentPanels();
         //BuildLabel.text = Application.version + ", " + GeneratedInfo.BundleVersionCode;//TODO: commented out during the Package refactor
-        var menuRoot = MenuContentContainer.GetRootParent();
-        MenuContentContainer.GetRootParent().ExecuteLayout();
-
+        loadContentPanelButtons();
     }
 
-    private void loadContentPanels()
+    private void loadContentPanelButtons()
     {
         foreach (var panel in AppControllerBase.Instance.TabletSettings.Panels)
         {
@@ -38,36 +32,55 @@ public class Tablet : MonoBehaviour
             button.Key = panel;
             button.OnInteractionEvent += Button_OnInteractionEvent;
         }
+
+        var menuRoot = MenuContentContainer.GetRootParent();
+        MenuContentContainer.GetRootParent().ExecuteLayout();
     }
 
-    private void Button_OnInteractionEvent(ButtonInteractable obj)
+    private void showPanel(TabPanel panelPrefab)
     {
-        Debug.Log("Button clicked: " + obj.gameObject.name, obj.gameObject);
+        hidePanel();
+        currentPanel = Instantiate(panelPrefab);
+        currentPanel.transform.SetParent(PanelContainer.SceneChildrenContainer.transform);
+        currentPanel.transform.Reset();
+        PanelContainer.ExecuteLayout();
     }
 
-    private void OnDestroy()
+    private void hidePanel()
     {
-        //TODO: commented out during the Package refactor
-        //if (networkSync != null)
-        //{
-        //    Normal.Realtime.Realtime.Destroy(networkSync.gameObject);
-        //}
-
-        AppSceneManager.OnEnvironmentUnloaded -= AppSceneManager_OnEnvironmentUnloaded;
+        if (currentPanel == null) return;
+        Destroy(currentPanel.gameObject);
+        currentPanel = null;
     }
 
-    private void createNetworkSync()
+    private void Button_OnInteractionEvent(ButtonInteractable sender)
     {
-        //TODO: commented out during the Package refactor
-        //if (!TelepresenceRoomManager.Instance.IsConnected) return;
-
-        //networkSync = Normal.Realtime.Realtime.Instantiate("Tablet (Remote)", Normal.Realtime.Realtime.InstantiateOptions.defaults).GetComponent<TabletNetworkSync>();
-        //networkSync.SetSource(this);
+        showPanel(sender.Key as TabPanel);
     }
 
-    private void AppSceneManager_OnEnvironmentUnloaded()
-    {
-        //Destroy(this.gameObject); //TODO: this was commented out during dev, but should be restored when complete
-    }
+    //private void OnDestroy()
+    //{
+    //    //TODO: commented out during the Package refactor
+    //    //if (networkSync != null)
+    //    //{
+    //    //    Normal.Realtime.Realtime.Destroy(networkSync.gameObject);
+    //    //}
+
+    //    AppSceneManager.OnEnvironmentUnloaded -= AppSceneManager_OnEnvironmentUnloaded;
+    //}
+
+    //private void createNetworkSync()
+    //{
+    //    //TODO: commented out during the Package refactor
+    //    //if (!TelepresenceRoomManager.Instance.IsConnected) return;
+
+    //    //networkSync = Normal.Realtime.Realtime.Instantiate("Tablet (Remote)", Normal.Realtime.Realtime.InstantiateOptions.defaults).GetComponent<TabletNetworkSync>();
+    //    //networkSync.SetSource(this);
+    //}
+
+    //private void AppSceneManager_OnEnvironmentUnloaded()
+    //{
+    //    //Destroy(this.gameObject); //TODO: this was commented out during dev, but should be restored when complete
+    //}
 
 }

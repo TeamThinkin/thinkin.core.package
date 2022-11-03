@@ -80,10 +80,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MenuContentContainer: {fileID: 3257796568902866942}
+  PanelContainer: {fileID: 1992440605938232867}
   BuildLabel: {fileID: 2966243011093201875}
   DefaultPanelIconSprite: {fileID: 21300000, guid: 58a8d4543387212488734685627e4824, type: 3}
   MenuButtonPrefab: {fileID: 5508894163860416045, guid: 1903e2d9ab52cd943ba1e484ebd85e22, type: 3}
-  PanelContainer: {fileID: 1691912435599409195}
 --- !u!1 &8433752815212502843
 GameObject:
   m_ObjectHideFlags: 0
@@ -544,11 +544,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c2ce930570febb24c81ff5d24d1e8696, type: 3}
---- !u!4 &1691912435599409195 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7219729760491389616, guid: c2ce930570febb24c81ff5d24d1e8696, type: 3}
+--- !u!114 &1992440605938232867 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7560931067199024312, guid: c2ce930570febb24c81ff5d24d1e8696, type: 3}
   m_PrefabInstance: {fileID: 8307804934609289883}
   m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63b5a76b574f22042badc7e9c782b5f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &2470942813194965337 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5837173056653857730, guid: c2ce930570febb24c81ff5d24d1e8696, type: 3}
