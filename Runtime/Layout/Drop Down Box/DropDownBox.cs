@@ -67,6 +67,7 @@ public class DropDownBox : MonoBehaviour, IHandlePointerEvent
         foreach(var item in Items)
         {
             var listItem = listItems.Get();
+            item.Width = ListBackground.localScale.x;
             listItem.ParentListControl = this;
             listItem.SetDto(item);
             listItem.transform.SetParent(ListItemsContainer.transform, false);
@@ -74,7 +75,7 @@ public class DropDownBox : MonoBehaviour, IHandlePointerEvent
 
         ListItemsContainer.ExecuteLayout();
         var listBounds = ListItemsContainer.GetBounds().Value;
-        ListBackground.localScale = new Vector3(1, listBounds.size.y, 1);
+        ListBackground.localScale = new Vector3(ListBackground.localScale.x, listBounds.size.y, ListBackground.localScale.z);
 
         SelectedItem = listItems.ActiveItems.First().Dto;
     }

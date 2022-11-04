@@ -9,8 +9,15 @@ public class ScrollAreaElementPresenter : ElementPresenterBase
 {
     [SerializeField] private Transform Origin;
 
+    private float? zoom = 1;
+
     public override void ParseDataElement(IElement ElementData)
     {
+        var zoomAttrib = ElementData.Attributes["zoom"];
+        if (zoomAttrib != null)
+        {
+            zoom = zoomAttrib.Value.ToFloat();
+        }
     }
 
     public override void ExecuteLayout()
@@ -63,7 +70,7 @@ public class ScrollAreaElementPresenter : ElementPresenterBase
             var maxRatio = Mathf.Max(ratio.x, ratio.y);
             
             transform.localPosition = fitBox.center;
-            Origin.localScale = 1 / maxRatio * Vector3.one;
+            Origin.localScale = (1 / maxRatio * Vector3.one) * (zoom.HasValue ? zoom.Value : 1);
         }
 
         Origin.localPosition = -(BoundingBox.Value.center * Origin.localScale.x) + (Vector3.forward * BoundingBox.Value.extents.z * Origin.localScale.x);

@@ -75,7 +75,9 @@ public class MapPanel : TabPanel
         }
 
         var list = new[] {
-            new ListItemDto() { Text = "Public Map", Value = "/public-map" }
+            new ListItemDto() { Text = "Public Map", Value = "/public-map" },
+            new ListItemDto() { Text = "Another Map", Value = "/public-map" },
+            new ListItemDto() { Text = "That Map", Value = "/public-map" }
         };
 
         MapsDropDownBox.SetItems(list);

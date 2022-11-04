@@ -35,21 +35,7 @@ public class MoveToSpawnPoint : MonoBehaviour
             var spawnPoint = spawnPoints.RandomItem();
             targetPoint = spawnPoint.transform.position;
             targetRot = spawnPoint.transform.rotation;
-
-            //Debug.DrawRay(targetPoint, Vector3.up * 10, Color.yellow, 60);
-            //Debug.DrawRay(targetPoint, spawnPoint.transform.forward * 10, Color.yellow, 60);
         }
-
-
-
-        //transform.rotation = targetRot;
-
-        //var playerOffset = (transform.position - Camera.main.transform.position).FlattenY();
-        //transform.position = targetPoint + playerOffset;
-
-        //TrackerOffsets.localPosition = Vector3.zero;
-        //TrackerOffsets.localRotation = Quaternion.identity;
-        //Player.SetPosition(transform.position, transform.rotation);
 
         AppControllerBase.Instance.PlayerBody.velocity = Vector3.zero;
         AppControllerBase.Instance.PlayerBody.angularVelocity = Vector3.zero;

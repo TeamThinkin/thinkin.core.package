@@ -121,11 +121,11 @@ public class ButtonInteractable : MonoBehaviour, IHandlePointerEvent
         onInteractionEnd();
     }
 
-    public void OnHoverStart(IUIPointer Sender, RaycastHit RayInfo)
+    virtual public void OnHoverStart(IUIPointer Sender, RaycastHit RayInfo)
     {
     }
 
-    public void OnHoverEnd(IUIPointer Sender)
+    virtual public void OnHoverEnd(IUIPointer Sender)
     {
     }
 

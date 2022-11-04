@@ -51,7 +51,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _displayName: Camera
   _iconSprite: {fileID: 21300000, guid: ce5becdd647cb4a40afb78ad519d2786, type: 3}
-  ParentTabView: {fileID: 0}
   FrontCamera: {fileID: 632623346238171621}
   BackCamera: {fileID: 6371455152634316444}
 --- !u!1 &632623344790858601
@@ -154,7 +153,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &632623345811631936
 Transform:
   m_ObjectHideFlags: 0
