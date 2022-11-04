@@ -34,6 +34,7 @@ public class ButtonInteractable : MonoBehaviour, IHandlePointerEvent
     public UnityEvent OnUnpressedUnityEvent;
 
     protected Material InactiveMaterial;
+    protected bool isHoverScaleFeedbackEnabled = true;
 
     public AudioSource AudioPlayer => _audioPlayer;
 
@@ -123,10 +124,12 @@ public class ButtonInteractable : MonoBehaviour, IHandlePointerEvent
 
     virtual public void OnHoverStart(IUIPointer Sender, RaycastHit RayInfo)
     {
+        if(isHoverScaleFeedbackEnabled) Visuals.transform.localScale = Vector3.one * 1.1f;
     }
 
     virtual public void OnHoverEnd(IUIPointer Sender)
     {
+        if (isHoverScaleFeedbackEnabled) Visuals.transform.localScale = Vector3.one;
     }
 
     public void OnGripStart(IUIPointer Sender, RaycastHit RayInfo)

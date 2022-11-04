@@ -21,6 +21,7 @@ public class ListItem : ButtonInteractable
 
     private void Awake()
     {
+        isHoverScaleFeedbackEnabled = false;
         backgroundRenderer = Background.GetComponent<Renderer>();
         backgroundRenderer.enabled = false;
     }
