@@ -48,14 +48,12 @@ public class PreviewOrbSubPresenter : PortalSubPresenter
     public override void OnHoverStart(IUIPointer Sender, RaycastHit RayInfo)
     {
         base.OnHoverStart(Sender, RayInfo);
-        //Sphere.localScale = Vector3.one * 1.05f;
         Highlight.SetActive(true);
     }
 
     public override void OnHoverEnd(IUIPointer Sender)
     {
         base.OnHoverEnd(Sender);
-        //if(Sphere != null && Sphere.gameObject != null) Sphere.localScale = Vector3.one;
         if (Highlight != null) Highlight.SetActive(false);
     }
 

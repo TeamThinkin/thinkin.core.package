@@ -96,6 +96,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8603720419186685984}
     m_Modifications:
+    - target: {fileID: 673869989755896441, guid: c2ce930570febb24c81ff5d24d1e8696, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 41308031a1be783449859e81ab59801e, type: 2}
     - target: {fileID: 2633405832199915915, guid: c2ce930570febb24c81ff5d24d1e8696, type: 3}
       propertyPath: m_Name
       value: Content Surface
