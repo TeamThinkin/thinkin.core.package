@@ -56,8 +56,7 @@ public class ScrollAreaElementPresenter : ElementPresenterBase
             return;
         }
         var fitBox = layoutSurface.Bounds;
-        Origin.localPosition = -(BoundingBox.Value.center * Origin.localScale.x) + (Vector3.forward * BoundingBox.Value.extents.z * Origin.localScale.x);
-
+        
         if (BoundingBox.HasValue)
         {
             var ratio = BoundingBox.Value.size.Divide(fitBox.size);
@@ -66,6 +65,8 @@ public class ScrollAreaElementPresenter : ElementPresenterBase
             transform.localPosition = fitBox.center;
             Origin.localScale = 1 / maxRatio * Vector3.one;
         }
+
+        Origin.localPosition = -(BoundingBox.Value.center * Origin.localScale.x) + (Vector3.forward * BoundingBox.Value.extents.z * Origin.localScale.x);
     }
 
     private void OnDrawGizmosSelected()

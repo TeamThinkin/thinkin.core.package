@@ -16,14 +16,12 @@ public class MapPanel : TabPanel
 
     protected override void OnShow()
     {
+        Debug.Log("Map Panel show");
         base.OnShow();
 
         MapsDropDownBox.SelectedItemChanged += MapsDropDownBox_SelectedItemChanged;
 
-        if (UserInfo.CurrentUser != null && UserInfo.CurrentUser != UserInfo.UnknownUser)
-        {
-            loadMapList();
-        }
+        loadMapList();
 
         UserInfo.OnCurrentUserChanged += UserInfo_OnCurrentUserChanged;
     }
@@ -70,6 +68,11 @@ public class MapPanel : TabPanel
         Debug.Log("Loading map list...");
         //var mapDtos = await WebAPI.Maps();
         //var list = mapDtos.Select(i => new ListItemDto() { Value = i, Text = i.DisplayName });
+
+        if (UserInfo.CurrentUser != null && UserInfo.CurrentUser != UserInfo.UnknownUser)
+        {
+
+        }
 
         var list = new[] {
             new ListItemDto() { Text = "Public Map", Value = "/public-map" }

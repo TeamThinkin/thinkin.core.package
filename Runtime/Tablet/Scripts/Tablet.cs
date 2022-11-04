@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class Tablet : MonoBehaviour
@@ -11,6 +12,7 @@ public class Tablet : MonoBehaviour
     [SerializeField] private ButtonInteractable MenuButtonPrefab;
 
     private TabPanel currentPanel;
+    private const float transitionDuration = 0.1f;
 
     private void Start()
     {
@@ -37,20 +39,39 @@ public class Tablet : MonoBehaviour
         MenuContentContainer.GetRootParent().ExecuteLayout();
     }
 
-    private void showPanel(TabPanel panelPrefab)
+    private async Task showPanel(TabPanel panelPrefab)
     {
+        if (currentPanel != null && panelPrefab.DisplayName == currentPanel.DisplayName) return;
+
         hidePanel();
         currentPanel = Instantiate(panelPrefab);
         currentPanel.transform.SetParent(PanelContainer.SceneChildrenContainer.transform);
         currentPanel.transform.Reset();
         PanelContainer.ExecuteLayout();
+
+        //currentPanel.ShowTab();
+
+        await AnimationHelper.StartAnimation(this, transitionDuration, 0, 1, t =>
+        {
+            currentPanel.transform.localScale = Vector3.one * t;
+        });
     }
 
-    private void hidePanel()
+    private async Task hidePanel()
     {
         if (currentPanel == null) return;
-        Destroy(currentPanel.gameObject);
+
+        var panel = currentPanel;
         currentPanel = null;
+
+        //panel.Hide();
+
+        await AnimationHelper.StartAnimation(this, transitionDuration, 1, 0, t =>
+        {
+            panel.transform.localScale = Vector3.one * t;
+        });
+
+        Destroy(panel.gameObject);
     }
 
     private void Button_OnInteractionEvent(ButtonInteractable sender)

@@ -22,7 +22,7 @@ public class TabView : MonoBehaviour
         foreach(var panel in panels)
         {
             panel.ParentTabView = this;
-            panel.Hide(true);
+            //panel.Hide(true);
         }
 
         if (DefaultPanel != null)
@@ -38,12 +38,13 @@ public class TabView : MonoBehaviour
 
         if(activePanel != null)
         {
-            activePanel.Hide();
+            //activePanel.Hide();
         }
 
         SelectedTabIndex = TabIndex;
         activePanel = panels[SelectedTabIndex];
-        activePanel.Show();
+        //activePanel.Show();
+        //activePanel.Show();
         SelectedTabChanged?.Invoke();
     }
 

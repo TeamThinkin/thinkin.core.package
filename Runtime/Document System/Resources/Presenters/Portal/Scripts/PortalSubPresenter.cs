@@ -18,7 +18,6 @@ public abstract class PortalSubPresenter : MonoBehaviour, IHandlePointerEvent
 
     public virtual void OnHoverStart(IUIPointer Sender, RaycastHit RayInfo) 
     {
-        Debug.Log("Portal SubPresenter hover start");
     }
 
     public virtual void OnHoverEnd(IUIPointer Sender) { }

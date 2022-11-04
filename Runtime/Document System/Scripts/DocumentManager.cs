@@ -17,7 +17,6 @@ public static class DocumentManager
         var config = Configuration.Default;
         var context = BrowsingContext.New(config);
         var document = await context.OpenAsync(req => req.Content(source).Address(Url));
-        
         return document;
     }
 

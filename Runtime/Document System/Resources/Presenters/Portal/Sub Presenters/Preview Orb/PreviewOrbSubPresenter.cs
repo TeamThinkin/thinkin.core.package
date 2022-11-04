@@ -10,6 +10,8 @@ public class PreviewOrbSubPresenter : PortalSubPresenter
     [SerializeField] private TMPro.TextMeshPro Label;
     [SerializeField] private Transform Sphere;
     [SerializeField] private Renderer SphereRenderer;
+    [SerializeField] private GameObject Highlight;
+    [SerializeField] private GameObject LoadingIndicator;
 
     private static Material baseImageMaterial;
 
@@ -18,6 +20,7 @@ public class PreviewOrbSubPresenter : PortalSubPresenter
     public override void Initialize(PortalElementPresenter ParentPortalPresenter)
     {
         base.Initialize(ParentPortalPresenter);
+        Highlight.SetActive(false);
         Label.text = ParentPortalPresenter.Title;
 
         loadPreviewImage();
@@ -31,6 +34,7 @@ public class PreviewOrbSubPresenter : PortalSubPresenter
 
     private async void loadPreviewImage()
     {
+        LoadingIndicator.SetActive(true);
         var meta = await DocumentManager.FetchDocumentMeta(parentPortalPresenter.Href);
         var imageTag = meta.FirstOrDefault(i => i.GetAttribute("name") == "intervrse:image360");
         if(imageTag != null)
@@ -38,18 +42,21 @@ public class PreviewOrbSubPresenter : PortalSubPresenter
             var imageUrl = imageTag.GetAttribute("content");
             SphereRenderer.sharedMaterial = await getImageMaterial(imageUrl);
         }
+        LoadingIndicator.SetActive(false);
     }
 
     public override void OnHoverStart(IUIPointer Sender, RaycastHit RayInfo)
     {
         base.OnHoverStart(Sender, RayInfo);
-        Sphere.localScale = Vector3.one * 1.05f;
+        //Sphere.localScale = Vector3.one * 1.05f;
+        Highlight.SetActive(true);
     }
 
     public override void OnHoverEnd(IUIPointer Sender)
     {
         base.OnHoverEnd(Sender);
-        if(Sphere != null && Sphere.gameObject != null) Sphere.localScale = Vector3.one;
+        //if(Sphere != null && Sphere.gameObject != null) Sphere.localScale = Vector3.one;
+        if (Highlight != null) Highlight.SetActive(false);
     }
 
     private static async Task<Material> getImageMaterial(string Url)
