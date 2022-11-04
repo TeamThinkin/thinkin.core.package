@@ -510,7 +510,7 @@ PrefabInstance:
     - target: {fileID: 4025222326051549725, guid: 36e1ad6ce4e28e34eb0dfedfa7aa442b, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 9ad1be6aa27047b4383a3cfa2889d121, type: 2}
+      objectReference: {fileID: 2100000, guid: e159de0af18d2c64ea7e7fac550a9e0e, type: 2}
     - target: {fileID: 4444072164039662277, guid: 36e1ad6ce4e28e34eb0dfedfa7aa442b, type: 3}
       propertyPath: m_Name
       value: Capture Button
