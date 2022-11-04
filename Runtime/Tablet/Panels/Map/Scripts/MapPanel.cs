@@ -6,50 +6,48 @@ using UnityEngine;
 public class MapPanel : TabPanel
 {
     [SerializeField] private DropDownBox MapsDropDownBox;
-    //[SerializeField] private MapView MapContents;
     [SerializeField] private GameObject MapContents;
-    //[SerializeField] private TabPanel SelectEnvironmentPanel;
-    //[SerializeField] private NewMapDestinationWizard NewDestinationWizard;
-
-    //public RegistryEntryDto SelectedMapDto { get; private set; }
+    [SerializeField] private GameObject LoadingIndicator;
+    
     private string selectedMapUrl;
 
     protected override void OnShow()
     {
-        Debug.Log("Map Panel show");
         base.OnShow();
 
         MapsDropDownBox.SelectedItemChanged += MapsDropDownBox_SelectedItemChanged;
-
         loadMapList();
-
         UserInfo.OnCurrentUserChanged += UserInfo_OnCurrentUserChanged;
-    }
 
+        Debug.Log("Listening for url change");
+        DestinationPresenter.UrlChanged += DestinationPresenter_UrlChanged;
+    }
 
     protected override void OnHide()
     {
         base.OnHide();
-        UserInfo.OnCurrentUserChanged -= UserInfo_OnCurrentUserChanged;//TODO: commented out during the Package refactor
+        UserInfo.OnCurrentUserChanged -= UserInfo_OnCurrentUserChanged;
+        DestinationPresenter.UrlChanged -= DestinationPresenter_UrlChanged;
     }
 
     private void OnDestroy()
     {
-        UserInfo.OnCurrentUserChanged -= UserInfo_OnCurrentUserChanged;//TODO: commented out during the Package refactor
+        UserInfo.OnCurrentUserChanged -= UserInfo_OnCurrentUserChanged;
         MapsDropDownBox.SelectedItemChanged -= MapsDropDownBox_SelectedItemChanged;
     }
 
-    public async void NavigateHome()
-    {
-        await DestinationPresenter.Instance.DisplayUrl(UserInfo.CurrentUser.HomeRoomUrl);
-    }
-
-    //public void NewDestinationButtonClicked()
+    //public async void NavigateHome()
     //{
-    //    NewDestinationWizard.StartWizard();
+    //    await DestinationPresenter.Instance.DisplayUrl(UserInfo.CurrentUser.HomeRoomUrl);
     //}
 
     private void UserInfo_OnCurrentUserChanged(UserInfo obj)
+    {
+        loadMapList();
+    }
+
+
+    private void DestinationPresenter_UrlChanged(string obj)
     {
         loadMapList();
     }
@@ -65,13 +63,12 @@ public class MapPanel : TabPanel
 
     private async void loadMapList()
     {
-        Debug.Log("Loading map list...");
-        //var mapDtos = await WebAPI.Maps();
-        //var list = mapDtos.Select(i => new ListItemDto() { Value = i, Text = i.DisplayName });
+        LoadingIndicator.SetActive(true);
 
         if (UserInfo.CurrentUser != null && UserInfo.CurrentUser != UserInfo.UnknownUser)
         {
-
+            var mapDtos = await WebAPI.Maps();
+            //TODO: hook this up
         }
 
         var list = new[] {
@@ -81,14 +78,21 @@ public class MapPanel : TabPanel
         };
 
         MapsDropDownBox.SetItems(list);
+
+        LoadingIndicator.SetActive(false);
     }
 
     private async void populateMap(string mapUrl)
     {
-        var absUrl = mapUrl.TransformRelativeUrlToAbsolute(DestinationPresenter.Instance.CurrentUrl);
-        Debug.Log("Populating map with url: " + absUrl);
-        //await MapContents.LoadCollection(mapUrl);
-        //DestinationPresenter.Instance.CurrentUrl.getsub
-        await DocumentManager.LoadDocumentIntoContainer(absUrl, MapContents.transform);
+        bool isAbsUrl = mapUrl.Contains("://");
+        string absUrl = mapUrl;
+
+        if (!isAbsUrl && DestinationPresenter.Instance.CurrentUrl != null)
+        {
+            absUrl = mapUrl.TransformRelativeUrlToAbsolute(DestinationPresenter.Instance.CurrentUrl);
+            isAbsUrl = true;
+        }
+
+        if(isAbsUrl) await DocumentManager.LoadDocumentIntoContainer(absUrl, MapContents.transform);
     }
 }

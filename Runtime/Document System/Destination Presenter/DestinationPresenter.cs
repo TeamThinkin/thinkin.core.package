@@ -40,6 +40,7 @@ public class DestinationPresenter : MonoBehaviour
         var newRoomId = Url.GetHashCode();
         if (newRoomId == CurrentDestinationId) return;
 
+        CurrentUrl = Url; //Just moved this here
         UrlChanged?.Invoke(Url);
 
         CurrentDestinationId = newRoomId;
@@ -57,7 +58,7 @@ public class DestinationPresenter : MonoBehaviour
         //await loadDocument(document);
         RootPresenter = await DocumentManager.LoadDocumentIntoContainer(document, _contentContainer, false);
 
-        CurrentUrl = Url;
+        //set current url was here
         OnDestinationLoaded?.Invoke();
         _transitionController.RevealScene();
 

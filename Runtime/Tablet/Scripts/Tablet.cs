@@ -13,6 +13,7 @@ public class Tablet : MonoBehaviour
 
     private TabPanel currentPanel;
     private const float transitionDuration = 0.1f;
+    private List<ButtonInteractable> tabButtons = new List<ButtonInteractable>();
 
     private void Start()
     {
@@ -20,10 +21,12 @@ public class Tablet : MonoBehaviour
 
         //BuildLabel.text = Application.version + ", " + GeneratedInfo.BundleVersionCode;//TODO: commented out during the Package refactor
         loadContentPanelButtons();
+        showPanel(tabButtons[0].Key as TabPanel);
     }
 
     private void loadContentPanelButtons()
     {
+        tabButtons.Clear();
         foreach (var panel in AppControllerBase.Instance.TabletSettings.Panels)
         {
             var button = Instantiate(MenuButtonPrefab).GetComponent<ButtonInteractable>();
@@ -33,6 +36,7 @@ public class Tablet : MonoBehaviour
             button.transform.Reset();
             button.Key = panel;
             button.OnInteractionEvent += Button_OnInteractionEvent;
+            tabButtons.Add(button);
         }
 
         var menuRoot = MenuContentContainer.GetRootParent();
@@ -44,12 +48,11 @@ public class Tablet : MonoBehaviour
         if (currentPanel != null && panelPrefab.DisplayName == currentPanel.DisplayName) return;
 
         hidePanel();
+
         currentPanel = Instantiate(panelPrefab);
         currentPanel.transform.SetParent(PanelContainer.SceneChildrenContainer.transform);
         currentPanel.transform.Reset();
         PanelContainer.ExecuteLayout();
-
-        //currentPanel.ShowTab();
 
         await AnimationHelper.StartAnimation(this, transitionDuration, 0, 1, t =>
         {
@@ -63,8 +66,6 @@ public class Tablet : MonoBehaviour
 
         var panel = currentPanel;
         currentPanel = null;
-
-        //panel.Hide();
 
         await AnimationHelper.StartAnimation(this, transitionDuration, 1, 0, t =>
         {
