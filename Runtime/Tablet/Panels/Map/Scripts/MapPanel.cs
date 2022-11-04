@@ -67,14 +67,12 @@ public class MapPanel : TabPanel
 
         if (UserInfo.CurrentUser != null && UserInfo.CurrentUser != UserInfo.UnknownUser)
         {
-            var mapDtos = await WebAPI.Maps();
+            //var mapDtos = await WebAPI.Maps();
             //TODO: hook this up
         }
 
         var list = new[] {
-            new ListItemDto() { Text = "Public Map", Value = "/public-map" },
-            new ListItemDto() { Text = "Another Map", Value = "/public-map" },
-            new ListItemDto() { Text = "That Map", Value = "/public-map" }
+            new ListItemDto() { Text = "Public Map", Value = "/public-map" }
         };
 
         MapsDropDownBox.SetItems(list);

@@ -19,8 +19,10 @@ public class ListItem : ButtonInteractable
 
     private Renderer backgroundRenderer;
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+    
         isHoverScaleFeedbackEnabled = false;
         backgroundRenderer = Background.GetComponent<Renderer>();
         backgroundRenderer.enabled = false;
