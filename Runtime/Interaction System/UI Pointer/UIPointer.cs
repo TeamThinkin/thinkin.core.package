@@ -8,6 +8,7 @@ public class UIPointer : MonoBehaviour, IUIPointer
     [SerializeField] private float MaxRayDistance = 10;
     [SerializeField] private LineRenderer Line;
     [SerializeField] private Transform HitPointIndicator;
+    [SerializeField] private bool IsLineRendererEnabled = true;
 
     private IHandlePointerEvent hoverItem;
     private IHandlePointerEvent currentHoverItem;
@@ -111,6 +112,12 @@ public class UIPointer : MonoBehaviour, IUIPointer
 
     private void updateVisuals(RaycastHit hitInfo)
     {
+        if(!IsLineRendererEnabled)
+        {
+            Line.enabled = false;
+            return;
+        }
+
         if (hitInfo.collider != null)
         {
             Line.positionCount = 2;

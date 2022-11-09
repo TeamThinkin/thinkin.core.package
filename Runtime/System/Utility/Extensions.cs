@@ -172,6 +172,10 @@ public static class Extensions
         return left;
     }
 
+    public static void Draw(this Ray ray, Color color)
+    {
+        Debug.DrawRay(ray.origin, ray.direction, color);
+    }
     public static void Print(this Vector3 vector, string prefix = null)
     {
         Debug.Log(prefix + vector.x.ToString("0.0000") + ", " + vector.y.ToString("0.0000") + ", " + vector.z.ToString("0.0000"));
