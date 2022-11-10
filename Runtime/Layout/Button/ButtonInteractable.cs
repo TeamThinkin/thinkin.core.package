@@ -107,6 +107,8 @@ public class ButtonInteractable : MonoBehaviour, IHandlePointerEvent
 
     private void updateState()
     {
+        if (Visuals == null || Visuals.gameObject == null) return;
+
         Visuals.localPosition = IsPressed ? PressOffset : Vector3.zero;
         if (BackgroundRenderer != null) BackgroundRenderer.sharedMaterial = _isPressed ? ActiveMaterial : InactiveMaterial;
     }

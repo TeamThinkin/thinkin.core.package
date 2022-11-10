@@ -15,6 +15,11 @@ public class Tablet : MonoBehaviour
     private const float transitionDuration = 0.1f;
     private List<ButtonInteractable> tabButtons = new List<ButtonInteractable>();
 
+    public void DestroyTablet()
+    {
+        Destroy(this.gameObject);
+    }
+
     private void Start()
     {
         //AppSceneManager.OnEnvironmentUnloaded += AppSceneManager_OnEnvironmentUnloaded;
