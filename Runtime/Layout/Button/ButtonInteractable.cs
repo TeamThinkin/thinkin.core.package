@@ -96,11 +96,12 @@ public class ButtonInteractable : MonoBehaviour, IHandlePointerEvent
 
     protected virtual void Released()
     {
+        if (gameObject == null) return;
+        
         if (_isPressed && Visuals != null) Visuals.localPosition = Vector3.zero;
 
         IsPressed = false;
         AudioPlayer?.PlayOneShot(UnpressedAudio);
-        //OnUnpressed?.Invoke();
         OnUnpressedEvent?.Invoke(this);
         OnUnpressedUnityEvent.Invoke();
     }

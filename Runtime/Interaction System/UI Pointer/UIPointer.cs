@@ -102,11 +102,11 @@ public class UIPointer : MonoBehaviour, IUIPointer
     {
         try
         {
-            if(currentHoverItem != null && currentHoverItem.gameObject != null) currentHoverItem.OnHoverEnd(this);
+            if(currentHoverItem != null && currentHoverItem.gameObject != null)  currentHoverItem.OnHoverEnd(this);
         }
         catch (System.Exception ex)
         {
-            Debug.LogError("Error with UIPointer OnHoverEnd: " + ex.Message);
+            Debug.LogException(ex);
         }
     }
 

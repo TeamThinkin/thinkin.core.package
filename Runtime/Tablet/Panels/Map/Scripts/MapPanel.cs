@@ -18,8 +18,6 @@ public class MapPanel : TabPanel
         MapsDropDownBox.SelectedItemChanged += MapsDropDownBox_SelectedItemChanged;
         loadMapList();
         UserInfo.OnCurrentUserChanged += UserInfo_OnCurrentUserChanged;
-
-        Debug.Log("Listening for url change");
         DestinationPresenter.UrlChanged += DestinationPresenter_UrlChanged;
     }
 

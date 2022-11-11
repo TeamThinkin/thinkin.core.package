@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class Tablet : MonoBehaviour
+public class Tablet : MonoBehaviour, ISpawnableItem
 {
     [SerializeField] private ElementPresenterBase MenuContentContainer;
     [SerializeField] private ElementPresenterBase PanelContainer;
@@ -14,6 +14,9 @@ public class Tablet : MonoBehaviour
     private TabPanel currentPanel;
     private const float transitionDuration = 0.1f;
     private List<ButtonInteractable> tabButtons = new List<ButtonInteractable>();
+
+    private const string _prefabPath = "Prefabs/Tablet (Remote)";
+    public string PrefabPath => _prefabPath;
 
     public void DestroyTablet()
     {
@@ -27,6 +30,8 @@ public class Tablet : MonoBehaviour
         //BuildLabel.text = Application.version + ", " + GeneratedInfo.BundleVersionCode;//TODO: commented out during the Package refactor
         loadContentPanelButtons();
         showPanel(tabButtons[0].Key as TabPanel);
+
+        ItemSpawnObserver.NotifyItemSpawned(this.gameObject);
     }
 
     private void loadContentPanelButtons()
