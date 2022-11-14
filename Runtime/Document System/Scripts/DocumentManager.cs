@@ -91,6 +91,7 @@ public static class DocumentManager
             }
             else
             {
+                Debug.Log("Get request complete for url: " + Url);
                 return request.downloadHandler.text;
             }
         }
