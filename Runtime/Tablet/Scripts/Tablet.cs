@@ -89,30 +89,4 @@ public class Tablet : MonoBehaviour, ISpawnableItem
     {
         showPanel(sender.Key as TabPanel);
     }
-
-    //private void OnDestroy()
-    //{
-    //    //TODO: commented out during the Package refactor
-    //    //if (networkSync != null)
-    //    //{
-    //    //    Normal.Realtime.Realtime.Destroy(networkSync.gameObject);
-    //    //}
-
-    //    AppSceneManager.OnEnvironmentUnloaded -= AppSceneManager_OnEnvironmentUnloaded;
-    //}
-
-    //private void createNetworkSync()
-    //{
-    //    //TODO: commented out during the Package refactor
-    //    //if (!TelepresenceRoomManager.Instance.IsConnected) return;
-
-    //    //networkSync = Normal.Realtime.Realtime.Instantiate("Tablet (Remote)", Normal.Realtime.Realtime.InstantiateOptions.defaults).GetComponent<TabletNetworkSync>();
-    //    //networkSync.SetSource(this);
-    //}
-
-    //private void AppSceneManager_OnEnvironmentUnloaded()
-    //{
-    //    //Destroy(this.gameObject); //TODO: this was commented out during dev, but should be restored when complete
-    //}
-
 }
