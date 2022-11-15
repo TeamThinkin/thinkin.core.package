@@ -140,7 +140,14 @@ public class UIPointer : MonoBehaviour, IUIPointer
         if (currentHoverItem != null)
         {
             currentTriggerItem = currentHoverItem;
-            currentTriggerItem.OnTriggerStart(this, rayInfo);
+            try
+            {
+                currentTriggerItem.OnTriggerStart(this, rayInfo);
+            }
+            catch(System.Exception ex)
+            {
+                Debug.LogException(ex);
+            }
         }
     }
 
@@ -148,7 +155,14 @@ public class UIPointer : MonoBehaviour, IUIPointer
     {
         if (currentTriggerItem != null)
         {
-            currentTriggerItem.OnTriggerEnd(this);
+            try
+            {
+                currentTriggerItem.OnTriggerEnd(this);
+            }
+            catch(System.Exception ex)
+            {
+                Debug.LogException(ex);
+            }
             currentTriggerItem = null;
         }
     }
@@ -158,7 +172,15 @@ public class UIPointer : MonoBehaviour, IUIPointer
         if (currentHoverItem != null)
         {
             currentGripItem = currentHoverItem;
-            currentGripItem.OnGripStart(this, rayInfo);
+
+            try
+            {
+                currentGripItem.OnGripStart(this, rayInfo);
+            }
+            catch(System.Exception ex)
+            {
+                Debug.LogException(ex);
+            }
         }
     }
 
@@ -166,7 +188,14 @@ public class UIPointer : MonoBehaviour, IUIPointer
     {
         if (currentGripItem != null)
         {
-            currentGripItem.OnGripEnd(this);
+            try
+            {
+                currentGripItem.OnGripEnd(this);
+            }
+            catch(System.Exception ex)
+            {
+                Debug.LogException(ex);
+            }
             currentGripItem = null;
         }
     }
