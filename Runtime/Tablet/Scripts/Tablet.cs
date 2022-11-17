@@ -18,6 +18,8 @@ public class Tablet : MonoBehaviour, ISpawnableItem
     private const string _prefabPath = "Prefabs/Tablet (Remote)";
     public string PrefabPath => _prefabPath;
 
+    public bool DestroyWhenOwnerLeaves => true;
+
     public void DestroyTablet()
     {
         Destroy(this.gameObject);

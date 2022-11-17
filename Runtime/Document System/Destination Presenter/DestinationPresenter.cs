@@ -26,6 +26,8 @@ public class DestinationPresenter : MonoBehaviour
     public string CurrentUrl { get; private set; }
     //public DocumentManager.PresenceInfoDto CurrentPresenceInfo { get; private set; }
 
+    public bool IsLoading { get; private set; }
+
     
 
     private void Awake()
@@ -40,7 +42,8 @@ public class DestinationPresenter : MonoBehaviour
         var newRoomId = Url.GetHashCode();
         if (newRoomId == CurrentDestinationId) return;
 
-        CurrentUrl = Url; //Just moved this here
+        IsLoading = true;
+        CurrentUrl = Url;
         UrlChanged?.Invoke(Url);
 
         CurrentDestinationId = newRoomId;
@@ -55,14 +58,13 @@ public class DestinationPresenter : MonoBehaviour
         _contentContainer.ClearChildren();
 
         var document = await documentTask;
-        //await loadDocument(document);
         RootPresenter = await DocumentManager.LoadDocumentIntoContainer(document, _contentContainer, false);
 
-        //set current url was here
         OnDestinationLoaded?.Invoke();
         _transitionController.RevealScene();
 
         releaseStashedPlayer();
+        IsLoading = false;
     }
 
     private void stashPlayer()

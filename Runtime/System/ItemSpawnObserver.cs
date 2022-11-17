@@ -17,4 +17,5 @@ public interface ISpawnableItem
     string PrefabPath { get; }
     GameObject gameObject { get; }
     Transform transform { get; }
+    bool DestroyWhenOwnerLeaves { get; }
 }
