@@ -17,6 +17,9 @@ public class UIPointer : MonoBehaviour, IUIPointer
     private RaycastHit rayInfo;
     private IUIPointerProvider provider;
 
+    private Ray ray;
+    public Ray Ray => ray;
+
     private void OnDestroy()
     {
         unsubscribeFromProvider();
@@ -49,7 +52,8 @@ public class UIPointer : MonoBehaviour, IUIPointer
     {
         if (provider == null) return;
 
-        if(Physics.Raycast(provider.GetRay(), out rayInfo, MaxRayDistance, Layers))
+        ray = provider.GetRay();
+        if(Physics.Raycast(ray, out rayInfo, MaxRayDistance, Layers))
         {
             //PrimaryHand.AllowGrabbing = false;
 
