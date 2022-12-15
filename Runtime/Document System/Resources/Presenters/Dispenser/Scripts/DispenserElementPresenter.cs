@@ -18,6 +18,9 @@ public class DispenserElementPresenter : ElementPresenterBase
         public GameObject Instance;
         public Vector3 LocalPosition;
         public ConnectingLine Line;
+
+        public bool IsDisconnected;
+        public Rigidbody Body;
     }
 
     [SerializeField] protected TMPro.TMP_Text Label;
@@ -25,12 +28,22 @@ public class DispenserElementPresenter : ElementPresenterBase
     [SerializeField] protected Transform ContentContainer;
     [SerializeField] protected Transform LayoutReference;
     [SerializeField] protected float ItemSize = 1;
+    [SerializeField] protected float ItemPadding = 0.1f;
     [SerializeField] protected int RowCount = 3;
     [SerializeField] protected Vector3 JitterScale = Vector3.one;
     [SerializeField] protected float ScrollMargin;
 
-    [SerializeField] protected PhysicMaterial DefaultMaterial;
-    public PhysicMaterial DefaultPhysicsMaterial => DefaultMaterial;
+    [SerializeField] protected AudioSource _DispenserAudioSource;
+    public AudioSource DispenserAudioSource => _DispenserAudioSource;
+
+    [SerializeField] protected AudioClip _ItemGrabSound;
+    public AudioClip ItemGrabSound => _ItemGrabSound;
+
+    [SerializeField] protected AudioClip _ItemReleaseSound;
+    public AudioClip ItemReleaseSound => _ItemReleaseSound;
+
+    [SerializeField] protected AudioClip _ItemRestoreSound;
+    public AudioClip ItemRestoreSound => _ItemRestoreSound;
 
     public float Scroll;
     public int ItemCounter;
@@ -71,6 +84,24 @@ public class DispenserElementPresenter : ElementPresenterBase
         }
     }
 
+    public void ReplaceItem(ItemInfo OriginalItem)
+    {
+        for(int i=0;i<items.Length;i++)
+        {
+            if(items[i] == OriginalItem)
+            {
+                var newItem = new ItemInfo();
+                newItem.AssetName = OriginalItem.AssetName;
+                newItem.AssetSourceUrl = OriginalItem.AssetSourceUrl;
+                newItem.Prefab = OriginalItem.Prefab;
+                newItem.LocalPosition = OriginalItem.LocalPosition;
+
+                prepItem(newItem);
+                items[i] = newItem;
+            }
+        }
+    }
+
     private ItemInfo getItem(string assetName, AssetBundle bundle)
     {
         var item = new ItemInfo();
@@ -79,60 +110,36 @@ public class DispenserElementPresenter : ElementPresenterBase
         item.AssetSourceUrl = src + "#" + item.AssetName;
         item.Prefab = bundle.LoadAsset<GameObject>(item.AssetName); //TODO: move this over to the async version
 
+        prepItem(item);
+
+        return item;
+    }
+
+    private void prepItem(ItemInfo item)
+    {
         var instance = Instantiate(item.Prefab, ContentContainer);
         instance.transform.localScale = ItemSize * Vector3.one;
         instance.transform.localRotation = Quaternion.Euler(0, 180, 0);
-
         item.Instance = instance;
+
         item.Line = Instantiate(LinePrefab, ContentContainer).GetComponent<ConnectingLine>();
         item.Line.TargetItem = item.Instance.transform;
+        item.IsDisconnected = false;
+
+        AppControllerBase.Instance.UIManager.MakeGrabbable(item.Instance);
+        item.Body = item.Instance.GetComponent<Rigidbody>();
+        item.Body.isKinematic = true;
 
         onDispenserItemCreate(item);
-
-        return item;
     }
 
     protected virtual void onDispenserItemCreate(ItemInfo item) { }
 
     protected virtual void Update()
     {
-        //handleSync();
         updateLayout();
         updateScroll();
     }
-
-
-
-    //private void handleSync()
-    //{
-    //    if (sync == null) return;
-
-    //    if(sync.isOwnedRemotelySelf)
-    //    {
-    //        Scroll = sync.Model.scrollValue;
-    //        itemCounter = sync.Model.counter;
-    //    }
-    //    else
-    //    {
-    //        sync.Model.scrollValue = Scroll;
-    //        sync.Model.counter = itemCounter;
-    //    }
-    //}
-
-
-    //private void Awake()
-    //{
-    //    GestureInput.OnUserInput += GestureInput_OnUserInput;
-    //}
-    //private void OnDestroy()
-    //{
-    //    GestureInput.OnUserInput -= GestureInput_OnUserInput;
-    //}
-
-    //private void GestureInput_OnUserInput()
-    //{
-    //    if (sync != null) sync.RequestOwnership();
-    //}
 
     private void updateScroll()
     {
@@ -160,6 +167,8 @@ public class DispenserElementPresenter : ElementPresenterBase
         foreach (var item in items)
         {
             //if (IsPolar) 
+            if (item.IsDisconnected) continue;
+
             item.Instance.transform.localPosition = FromPolar(item.LocalPosition + Vector3.left * Scroll);
             if (item.LocalPosition.x >= left && item.LocalPosition.x <= right)
             {
@@ -199,19 +208,22 @@ public class DispenserElementPresenter : ElementPresenterBase
 
         int rowIndex = 0;
         float y;
+        
         for (int i=0;i<items.Length;i++)
         {
             var item = items[i];
+            jitter = Random.insideUnitSphere;
+            jitter.Scale(JitterScale * ItemSize);
 
             rowIndex = (rowIndex + Random.Range(1, RowCount)) % RowCount;
             y = Mathf.Lerp(referenceBottom, referenceTop, (float)rowIndex / (float)(RowCount - 1));
 
-            jitter = Random.insideUnitSphere;
-            jitter.Scale(JitterScale * ItemSize);
-            item.LocalPosition = new Vector3(i * ItemSize, y, 0) + jitter;
-
-            item.Instance.transform.localPosition = FromPolar(item.LocalPosition); //IsPolar ? FromPolar(item.LocalPosition) : item.LocalPosition;
-            item.Instance.transform.localScale = ItemSize * Vector3.one;
+            if (!item.IsDisconnected)
+            {
+                item.LocalPosition = new Vector3(i * (ItemSize + ItemPadding), y, 0) + jitter;
+                item.Instance.transform.localPosition = FromPolar(item.LocalPosition); //IsPolar ? FromPolar(item.LocalPosition) : item.LocalPosition;
+                item.Instance.transform.localScale = ItemSize * Vector3.one;
+            }
         }
 
         Random.state = prevState;
