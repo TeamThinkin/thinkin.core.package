@@ -31,31 +31,55 @@ public class MomentumVector3
     }
 }
 
+//public class MomentumFloat
+//{
+//    public float Value;
+//    public float DecayRate;
+//    public float SmoothingRate;
+
+//    private float smoothValue;
+
+//    public MomentumFloat(float DecayRate = 0.5f, float SmoothingRate = 0.1f)
+//    {
+//        this.Value = 0;
+//        this.smoothValue = this.Value;
+//        this.DecayRate = DecayRate;
+//        this.SmoothingRate = SmoothingRate;
+//    }
+
+//    public void Set(float Value)
+//    {
+//        smoothValue = Mathf.Lerp(Value, smoothValue, SmoothingRate);
+//        this.Value = smoothValue;
+//    }
+
+//    public void Update()
+//    {
+//        smoothValue = Value = Mathf.Lerp(smoothValue, 0, DecayRate);
+//    }
+//}
+
 public class MomentumFloat
 {
     public float Value;
     public float DecayRate;
     public float SmoothingRate;
 
-    private float smoothValue;
 
     public MomentumFloat(float DecayRate = 0.5f, float SmoothingRate = 0.1f)
     {
         this.Value = 0;
-        this.smoothValue = this.Value;
         this.DecayRate = DecayRate;
         this.SmoothingRate = SmoothingRate;
     }
 
-    public void Set(float Value)
+    public void Set(float NewValue)
     {
-        //this.Value = Value;
-        smoothValue = Mathf.Lerp(Value, smoothValue, SmoothingRate);
-        this.Value = smoothValue;
+        Value = Mathf.Lerp(NewValue, Value, SmoothingRate);
     }
 
     public void Update()
     {
-        smoothValue = Value = Mathf.Lerp(smoothValue, 0, DecayRate);
+        Value = Mathf.Lerp(Value, 0, DecayRate);
     }
 }

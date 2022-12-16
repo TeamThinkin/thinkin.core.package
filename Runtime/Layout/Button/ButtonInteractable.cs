@@ -104,7 +104,6 @@ public class ButtonInteractable : MonoBehaviour, IHandlePointerEvent
     protected virtual void Released()
     {
         if (isBeingDestroyed || gameObject == null) return;
-        
         if (_isPressed && Visuals != null) Visuals.localPosition = Vector3.zero;
 
         IsPressed = false;
