@@ -32,6 +32,8 @@ public class DispenserElementPresenter : ElementPresenterBase
     [SerializeField] protected int RowCount = 3;
     [SerializeField] protected Vector3 JitterScale = Vector3.one;
     [SerializeField] protected float ScrollMargin;
+    [SerializeField] protected ScrollGestureZone GestureInput;
+
 
     [SerializeField] protected AudioSource _DispenserAudioSource;
     public AudioSource DispenserAudioSource => _DispenserAudioSource;
@@ -69,6 +71,8 @@ public class DispenserElementPresenter : ElementPresenterBase
     {
         await base.Initialize();
 
+        GestureInput.OnUserInput += GestureInput_OnUserInput;
+
         Label.text = title;
         ApplyPlacement(placement, this.transform);
         ContentContainer.ClearChildren();
@@ -82,6 +86,19 @@ public class DispenserElementPresenter : ElementPresenterBase
 
             updateLayout();
         }
+    }
+
+    protected virtual void OnDestroy()
+    {
+        GestureInput.OnUserInput -= GestureInput_OnUserInput;
+    }
+
+    public void ResetItem(ItemInfo item)
+    {
+        item.Instance.transform.localScale = ItemSize * Vector3.one;
+        item.Instance.transform.localRotation = Quaternion.Euler(0, 180, 0);
+        item.IsDisconnected = false;
+        item.Body.isKinematic = true;
     }
 
     public void ReplaceItem(ItemInfo OriginalItem)
@@ -102,6 +119,37 @@ public class DispenserElementPresenter : ElementPresenterBase
         }
     }
 
+    public void DisableGestureZone()
+    {
+        GestureInput.enabled = false;
+    }
+
+    public void EnableGestureZone()
+    {
+        GestureInput.enabled = true;
+    }
+
+    public int GetNextItemId()
+    {
+        return ItemCounter++;
+    }
+
+    
+    ////////////////////////////////////////////////////////////
+    
+
+    protected virtual void Update()
+    {
+        trackGestureInput();
+        updateLayout();
+        updateScroll();
+    }
+
+    private void GestureInput_OnUserInput()
+    {
+        FireOnUserInput();
+    }
+
     private ItemInfo getItem(string assetName, AssetBundle bundle)
     {
         var item = new ItemInfo();
@@ -117,28 +165,21 @@ public class DispenserElementPresenter : ElementPresenterBase
 
     private void prepItem(ItemInfo item)
     {
-        var instance = Instantiate(item.Prefab, ContentContainer);
-        instance.transform.localScale = ItemSize * Vector3.one;
-        instance.transform.localRotation = Quaternion.Euler(0, 180, 0);
-        item.Instance = instance;
-
+        item.Instance = Instantiate(item.Prefab, ContentContainer);
         item.Line = Instantiate(LinePrefab, ContentContainer).GetComponent<ConnectingLine>();
         item.Line.TargetItem = item.Instance.transform;
-        item.IsDisconnected = false;
 
         AppControllerBase.Instance.UIManager.MakeGrabbable(item.Instance);
         item.Body = item.Instance.GetComponent<Rigidbody>();
-        item.Body.isKinematic = true;
-
+        ResetItem(item);
         onDispenserItemCreate(item);
     }
 
-    protected virtual void onDispenserItemCreate(ItemInfo item) { }
-
-    protected virtual void Update()
+    protected virtual void onDispenserItemCreate(ItemInfo item) 
     {
-        updateLayout();
-        updateScroll();
+        var dispenserItem = item.Instance.AddComponent<DispenserItem>();
+        dispenserItem.SetItemInfo(item);
+        dispenserItem.ParentDispenser = this;
     }
 
     private void updateScroll()
@@ -227,6 +268,11 @@ public class DispenserElementPresenter : ElementPresenterBase
         }
 
         Random.state = prevState;
+    }
+
+    private void trackGestureInput()
+    {
+        Scroll += GestureInput.ScrollValue;
     }
 
     private Vector3 FromPolar(Vector3 input)
