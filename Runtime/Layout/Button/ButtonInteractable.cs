@@ -11,6 +11,8 @@ public class ButtonInteractable : MonoBehaviour, IHandlePointerEvent
     public bool IsToggle;
     public bool IsPhysicalHandInteractionsDisabled;
 
+    protected bool isBeingDestroyed;
+
     [SerializeField] protected Transform Visuals;
     [SerializeField] protected bool StartPressed = false;
     [SerializeField] protected Vector3 PressOffset = new Vector3(0, 0, 0.05f);
@@ -64,6 +66,11 @@ public class ButtonInteractable : MonoBehaviour, IHandlePointerEvent
         }
     }
 
+    protected virtual void OnDestroy()
+    {
+        isBeingDestroyed = true;
+    }
+
     protected virtual void  onInteractionStart()
     {
         if (IsToggle)
@@ -96,7 +103,7 @@ public class ButtonInteractable : MonoBehaviour, IHandlePointerEvent
 
     protected virtual void Released()
     {
-        if (gameObject == null) return;
+        if (isBeingDestroyed || gameObject == null) return;
         
         if (_isPressed && Visuals != null) Visuals.localPosition = Vector3.zero;
 
