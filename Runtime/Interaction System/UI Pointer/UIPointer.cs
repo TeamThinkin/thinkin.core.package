@@ -55,8 +55,6 @@ public class UIPointer : MonoBehaviour, IUIPointer
         ray = provider.GetRay();
         if(Physics.Raycast(ray, out rayInfo, MaxRayDistance, Layers))
         {
-            //PrimaryHand.AllowGrabbing = false;
-
             if (rayInfo.collider.gameObject.TryGetComponent<IHandlePointerEvent>(out hoverItem))
             {
                 if (hoverItem != currentHoverItem)
@@ -73,13 +71,15 @@ public class UIPointer : MonoBehaviour, IUIPointer
             }
             else
             {
-                currentHoverItem = null;
+                if (currentHoverItem != null)
+                {
+                    notifyEndHover();
+                    currentHoverItem = null;
+                }
             }
         }
         else
         {
-            //PrimaryHand.AllowGrabbing = true;
-
             if (currentHoverItem != null)
             {
                 notifyEndHover();

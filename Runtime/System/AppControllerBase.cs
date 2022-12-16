@@ -13,6 +13,7 @@ public abstract class AppControllerBase : MonoBehaviour
     public abstract Camera MainCamera { get; }
     public abstract string BundleVersionCode { get; }
     public abstract IUIManager UIManager { get; }
+    public abstract bool IsPancake { get; }
 
     public abstract void SetPlayerPosition(Vector3 WorldPosition);
     public abstract void SetPlayerPosition(Vector3 WorldPosition, Quaternion WorldRotation);

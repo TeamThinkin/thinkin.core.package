@@ -20,7 +20,6 @@ public class MomentumVector3
 
     public void Set(Vector3 Value)
     {
-        //this.Value = Value;
         smoothValue = Vector3.Lerp(Value, smoothValue, SmoothingRate);
         this.Value = smoothValue;
     }
@@ -31,46 +30,21 @@ public class MomentumVector3
     }
 }
 
-//public class MomentumFloat
-//{
-//    public float Value;
-//    public float DecayRate;
-//    public float SmoothingRate;
-
-//    private float smoothValue;
-
-//    public MomentumFloat(float DecayRate = 0.5f, float SmoothingRate = 0.1f)
-//    {
-//        this.Value = 0;
-//        this.smoothValue = this.Value;
-//        this.DecayRate = DecayRate;
-//        this.SmoothingRate = SmoothingRate;
-//    }
-
-//    public void Set(float Value)
-//    {
-//        smoothValue = Mathf.Lerp(Value, smoothValue, SmoothingRate);
-//        this.Value = smoothValue;
-//    }
-
-//    public void Update()
-//    {
-//        smoothValue = Value = Mathf.Lerp(smoothValue, 0, DecayRate);
-//    }
-//}
-
 public class MomentumFloat
 {
     public float Value;
     public float DecayRate;
     public float SmoothingRate;
+    public float HighDecayThreshold;
+    public float HighDecayRate;
 
-
-    public MomentumFloat(float DecayRate = 0.5f, float SmoothingRate = 0.1f)
+    public MomentumFloat(float DecayRate = 0.5f, float SmoothingRate = 0.1f, float HighDecayThresholdValue = 0.01f, float HighDecayRate = 0.2f)
     {
         this.Value = 0;
         this.DecayRate = DecayRate;
         this.SmoothingRate = SmoothingRate;
+        this.HighDecayThreshold = HighDecayThresholdValue;
+        this.HighDecayRate = HighDecayRate;
     }
 
     public void Set(float NewValue)
@@ -80,6 +54,6 @@ public class MomentumFloat
 
     public void Update()
     {
-        Value = Mathf.Lerp(Value, 0, DecayRate);
+        Value = Mathf.Lerp(Value, 0, Value > HighDecayThreshold ? DecayRate : HighDecayRate);
     }
 }
