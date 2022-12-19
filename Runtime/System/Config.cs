@@ -8,7 +8,8 @@ public static class Config
     /*public const string PlatformKey = "StandaloneWindows";*/
     public const string PlatformKey = "Windows64";
 #elif UNITY_STANDALONE || UNITY_EDITOR
-    public const string PlatformKey = "StandaloneWindows64";
+    public const string PlatformKey = "Windows64";
+    //public const string PlatformKey = "StandaloneWindows64";
 #elif UNITY_ANDROID
     public const string PlatformKey = "Android";
 #elif UNITY_WEBGL
