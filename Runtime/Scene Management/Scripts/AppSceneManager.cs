@@ -19,30 +19,28 @@ public class AppSceneManager
     private static string currentCatalogUrl;
     private static bool isLoading;
 
-    public static async Task LoadLocalScene(string SceneName)
+    public static async Task LoadLocalScene(string SceneName, bool useTransition = false)
     {
         if (isLoading) return;
-        if (currentScene != SceneName)
-        {
-            isLoading = true;
-            //for (int i=0;i<SceneManager.sceneCount;i++)
-            //{
-            //    if (SceneManager.GetSceneAt(i).name == SceneName) return;
-            //}
+        if (currentScene == SceneName) return; //NOTE: when this line was inserted it meant that OnEnvironmentLoaded would no longer be invoked
 
-            OnEnvironmentUnloaded?.Invoke();
+        isLoading = true;
 
-            await SceneManager.LoadSceneAsync(SceneName, LoadSceneMode.Single).GetTask();
-            disableExtraCameras();
+        if(useTransition) await TransitionController.Instance.HideScene();
+        
+        OnEnvironmentUnloaded?.Invoke();
 
-            currentScene = SceneName;
-            currentSceneUrl = null;
-            currentSceneIsRemote = false;
-            isLoading = false;
-        }
+        await SceneManager.LoadSceneAsync(SceneName, LoadSceneMode.Single).GetTask();
+        disableExtraCameras();
+
+        currentScene = SceneName;
+        currentSceneUrl = null;
+        currentSceneIsRemote = false;
+        isLoading = false;
+        
         OnEnvironmentLoaded?.Invoke();
 
-        
+        if (useTransition) TransitionController.Instance.RevealScene();
     }
 
     public static async Task LoadRemoteScene(string SceneUrl)
@@ -89,11 +87,16 @@ public class AppSceneManager
 
     private static void disableExtraCameras()
     {
+        //In the even the a loaded scene already has a camera in it, we want to disable it so it doesnt fuck up the user's main camera
         var cameras = GameObject.FindObjectsOfType<Camera>();
         var mainCamera = AppControllerBase.Instance.MainCamera;
         foreach (var camera in cameras)
         {
-            if (camera != mainCamera) camera.gameObject.SetActive(false);
+            if (camera != mainCamera && camera.targetTexture == null)
+            {
+                Debug.Log("Extra camera found in scene. Disabling it. " + camera.gameObject.name, camera.gameObject);
+                camera.gameObject.SetActive(false);
+            }
         }
     }
 }

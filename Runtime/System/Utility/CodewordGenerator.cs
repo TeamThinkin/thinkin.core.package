@@ -29,6 +29,14 @@ public static class CodewordGenerator
         return $"{shortAdjectives.RandomItem()}-{shortAdjectives.RandomItem()}-{shortNouns.RandomItem()}".ToLower();
     }
 
+    public static string GetSimpleName()
+    {
+        var shortAdjectives = _adjectives.Where(i => i.Length <= 5).ToArray();
+        var shortNouns = _animals.Where(i => i.Length <= 5).ToArray();
+
+        return $"{shortAdjectives.RandomItem().Capitalize()} {shortNouns.RandomItem().Capitalize()}";
+    }
+
     public static T RandomItem<T>(this IEnumerable<T> list)
     {
         return list.Skip(Random.Range(0, list.Count() - 1)).First();
