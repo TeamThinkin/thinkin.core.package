@@ -15,7 +15,7 @@ public static class CoreModule
 
             await AppSceneManager.LoadLocalScene("Home Room", true);
             //await DestinationPresenter.Instance.DisplayUrl(!string.IsNullOrEmpty(user.CurrentRoomUrl) ? user.CurrentRoomUrl : user.HomeRoomUrl); //TODO: this doesnt account for an empty Home Room Url
-            
+
         }
         else
         {
