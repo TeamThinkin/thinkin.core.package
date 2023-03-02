@@ -29,4 +29,9 @@ public class HomeRoomController : MonoBehaviour
 
         UserPresenter.SetModel(UserInfo.CurrentUser);
     }
+
+    public void OnChangeNameButtonPressed()
+    {
+        Debug.Log("Change name pressed");
+    }
 }

@@ -9,7 +9,7 @@ public class UserInfoPresenter : MonoBehaviour
     public void SetModel(UserInfo User)
     {
         if (UserInfo.CurrentUser != null)
-            Label.text = "Welcome " + User.DisplayName;
+            Label.text = "Welcome, " + User.DisplayName;
         else
             Label.text = "Not logged in";
     }
