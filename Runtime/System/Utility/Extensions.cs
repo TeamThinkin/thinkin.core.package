@@ -220,6 +220,11 @@ public static class Extensions
         return s?.Substring(1, s.Length - 2);
     }
 
+    public static bool IsNullOrEmpty(this string s)
+    {
+        return string.IsNullOrEmpty(s);
+    }
+
     public static bool InvolvesPrimaryFingerTip(this Collision collision)
     {
         return collision.contacts.Any(i => i.otherCollider.gameObject.tag == "PointerFingerTip" || i.thisCollider.gameObject.tag == "PointerFingerTip");
