@@ -220,6 +220,11 @@ public static class Extensions
         return s?.Substring(1, s.Length - 2);
     }
 
+    public static bool IsNullOrEmpty(this string s)
+    {
+        return string.IsNullOrEmpty(s);
+    }
+
     public static bool InvolvesPrimaryFingerTip(this Collision collision)
     {
         return collision.contacts.Any(i => i.otherCollider.gameObject.tag == "PointerFingerTip" || i.thisCollider.gameObject.tag == "PointerFingerTip");
@@ -374,5 +379,12 @@ public static class Extensions
             Debug.LogError("Invalid quaternion string (Expecting {0.1,0.2,0.3,0.4}): " + text);
             return null;
         }
+    }
+
+    public static string Capitalize(this string text)
+    {
+        if (string.IsNullOrEmpty(text)) return text;
+
+        return char.ToUpper(text[0]) + text.Substring(1);
     }
 }
