@@ -19,7 +19,7 @@ public abstract class AppControllerBase : MonoBehaviour
     public abstract void SetPlayerPosition(Vector3 WorldPosition);
     public abstract void SetPlayerPosition(Vector3 WorldPosition, Quaternion WorldRotation);
     public abstract void SetPlayerRotation(Quaternion WorldRotation);
-    
+
 
     public virtual void Awake()
     {

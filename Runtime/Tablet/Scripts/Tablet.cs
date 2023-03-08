@@ -22,7 +22,8 @@ public class Tablet : MonoBehaviour, ISpawnableItem
 
     public void DestroyTablet()
     {
-        Destroy(this.gameObject);
+        //Destroy(this.gameObject);
+        this.gameObject.SetActive(false);
     }
 
     private void Start()
@@ -33,7 +34,17 @@ public class Tablet : MonoBehaviour, ISpawnableItem
         loadContentPanelButtons();
         showPanel(tabButtons[0].Key as TabPanel);
 
+        //ItemSpawnObserver.NotifyItemSpawned(this.gameObject);
+    }
+
+    private void OnEnable()
+    {
         ItemSpawnObserver.NotifyItemSpawned(this.gameObject);
+    }
+
+    private void OnDisable()
+    {
+        ItemSpawnObserver.NotifyItemDespawned(this.gameObject);
     }
 
     private void loadContentPanelButtons()
