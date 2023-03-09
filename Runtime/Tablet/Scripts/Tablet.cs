@@ -20,6 +20,8 @@ public class Tablet : MonoBehaviour, ISpawnableItem
 
     public bool DestroyWhenOwnerLeaves => true;
 
+    public bool DeactiveTargetOnSyncDestroy => true;
+
     public void DestroyTablet()
     {
         //Destroy(this.gameObject);

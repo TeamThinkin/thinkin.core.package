@@ -24,4 +24,5 @@ public interface ISpawnableItem
     GameObject gameObject { get; }
     Transform transform { get; }
     bool DestroyWhenOwnerLeaves { get; }
+    bool DeactiveTargetOnSyncDestroy { get; }
 }
