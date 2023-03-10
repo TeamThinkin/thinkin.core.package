@@ -98,6 +98,9 @@ public class Tablet : MonoBehaviour, ISpawnableItem
         });
 
         Destroy(panel.gameObject);
+
+        //Destroy(currentPanel.gameObject);
+        //currentPanel = null;
     }
 
     private void Button_OnInteractionEvent(ButtonInteractable sender)
