@@ -39,6 +39,7 @@ public class AppSceneManager
             currentSceneUrl = null;
             currentSceneIsRemote = false;
             isLoading = false;
+            DestinationPresenter.Instance.ResetCurrentDestination(); //TODO: reevaulate the logic here
         }
         OnEnvironmentLoaded?.Invoke();
 

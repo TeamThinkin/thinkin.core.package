@@ -67,6 +67,11 @@ public class DestinationPresenter : MonoBehaviour
         IsLoading = false;
     }
 
+    public void ResetCurrentDestination() //TODO: the logic between this and AppSceneManager.LoadLocalRoom probably needs some thought. This doesnt seem like a good way to accomplish this
+    {
+        CurrentDestinationId = null;
+    }
+
     private void stashPlayer()
     {
         var playerBody = AppControllerBase.Instance.PlayerBody;

@@ -91,6 +91,7 @@ public static class DeviceRegistrationController
 
     public static async void Logout()
     {
+        await WebAPI.ClearDeviceRegistration(getMacAddress());
         PlayerPrefs.DeleteKey("deviceUID");
         //PlayerPrefs.DeleteAll();
         UserInfo.CurrentUser = UserInfo.UnknownUser;

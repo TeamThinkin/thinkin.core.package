@@ -37,6 +37,11 @@ public static class WebAPI
         return await postRequest<RegisterDeviceResultDto>(HomeServerApiBaseUrl + "device/register", new RegisterDeviceRequestDto() { Uid = Uid, Mac = MacAddress });
     }
 
+    public static async Task<RegisterDeviceResultDto> ClearDeviceRegistration(string MacAddress)
+    {
+        return await postRequest<RegisterDeviceResultDto>(HomeServerApiBaseUrl + "auth/clearDeviceRegistration", new RegisterDeviceRequestDto() { Mac = MacAddress });
+    }
+
     public static async Task<RegistryEntryDto[]> Maps()
     {
         return await getRequest<RegistryEntryDto[]>(HomeServerApiBaseUrl + "auth/map");
