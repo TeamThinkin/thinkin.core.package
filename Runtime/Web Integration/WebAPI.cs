@@ -27,6 +27,11 @@ public static class WebAPI
         return uri.Scheme + "://" + uri.Authority + "/" + ApiVersion + "/";
     }
 
+    public static async Task<InviteDto> GetInviteByCode(string Code)
+    {
+        return await postRequest<InviteDto>(HomeServerApiBaseUrl + "invite", new { code = Code });
+    }
+
     public static string GetCollectionUrl(string ServerApiBaseUrl, string CollectionKey)
     {
         return ServerApiBaseUrl + "auth/collection/" + CollectionKey;
@@ -35,11 +40,6 @@ public static class WebAPI
     public static async Task<RegisterDeviceResultDto> RegisterDevice(string Uid, string MacAddress)
     {
         return await postRequest<RegisterDeviceResultDto>(HomeServerApiBaseUrl + "device/register", new RegisterDeviceRequestDto() { Uid = Uid, Mac = MacAddress });
-    }
-
-    public static async Task<RegisterDeviceResultDto> ClearDeviceRegistration(string MacAddress)
-    {
-        return await postRequest<RegisterDeviceResultDto>(HomeServerApiBaseUrl + "auth/clearDeviceRegistration", new RegisterDeviceRequestDto() { Mac = MacAddress });
     }
 
     public static async Task<RegistryEntryDto[]> Maps()
@@ -90,7 +90,7 @@ public static class WebAPI
             var json = body.ToJSON();
             var bytes = System.Text.Encoding.UTF8.GetBytes(json);
             request.SetRequestHeader("Content-Type", "application/json");
-            if(!string.IsNullOrEmpty(UserInfo.CurrentUser?.AuthToken)) request.SetRequestHeader("auth", UserInfo.CurrentUser.AuthToken);
+            //if(!string.IsNullOrEmpty(UserInfo.CurrentUser?.AuthToken)) request.SetRequestHeader("auth", UserInfo.CurrentUser.AuthToken);
             request.uploadHandler = new UploadHandlerRaw(bytes);
             request.downloadHandler = new DownloadHandlerBuffer();
 
@@ -129,7 +129,7 @@ public static class WebAPI
             var json = body.ToJSON();
             var bytes = System.Text.Encoding.UTF8.GetBytes(json);
             request.SetRequestHeader("Content-Type", "application/json");
-            if (!string.IsNullOrEmpty(UserInfo.CurrentUser?.AuthToken)) request.SetRequestHeader("auth", UserInfo.CurrentUser.AuthToken);
+            //if (!string.IsNullOrEmpty(UserInfo.CurrentUser?.AuthToken)) request.SetRequestHeader("auth", UserInfo.CurrentUser.AuthToken);
             request.uploadHandler = new UploadHandlerRaw(bytes);
             request.downloadHandler = new DownloadHandlerBuffer();
 
@@ -152,7 +152,7 @@ public static class WebAPI
         using (var request = new UnityWebRequest(Url, "GET"))
         {
             request.SetRequestHeader("Content-Type", "application/json");
-            if (UserInfo.CurrentUser != null) request.SetRequestHeader("auth", UserInfo.CurrentUser.AuthToken);
+            //if (UserInfo.CurrentUser != null) request.SetRequestHeader("auth", UserInfo.CurrentUser.AuthToken);
             request.downloadHandler = new DownloadHandlerBuffer();
 
             await request.SendWebRequest().GetTask();
@@ -164,7 +164,7 @@ public static class WebAPI
             }
             else
             {
-                if(Converter != null)
+                if (Converter != null)
                     return JsonConvert.DeserializeObject<T>(request.downloadHandler.text, Converter);
                 else
                     return JsonConvert.DeserializeObject<T>(request.downloadHandler.text);

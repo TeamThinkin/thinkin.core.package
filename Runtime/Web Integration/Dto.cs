@@ -3,6 +3,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public class InviteDto
+{
+    [JsonProperty("_id")]
+    public string Id { get; set; }
+
+    [JsonProperty("code")]
+    public string Code { get; set; }
+
+    [JsonProperty("userDisplayName")]
+    public string UserDisplayName { get; set; }
+
+    [JsonProperty("destinationUrl")]
+    public string DestinationUrl { get; set; }
+}
+
 public class AddMapDestinationDto
 {
     [JsonProperty("displayName")]
