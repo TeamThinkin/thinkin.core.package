@@ -29,13 +29,28 @@ public class InviteDialogController : MonoBehaviour
 
     private void CodeTextbox1_Changed(Textbox textbox)
     {
-        if (textbox.Text.Length == 2) FocusManager.SetFocus(CodeTextbox2);
+        var text = textbox.Text.Trim();
+        if(text != textbox.Text)
+        {
+            textbox.Text = text;
+            return;
+        }
+
+        if (text.Length == 2) FocusManager.SetFocus(CodeTextbox2);
 
         checkCode();
     }
 
     private void CodeTextbox2_Changed(Textbox textbox)
     {
+        var text = textbox.Text.Trim();
+        if (text != textbox.Text)
+        {
+            prevBoxLength2 = textbox.Text.Length;
+            textbox.Text = text;
+            return;
+        }
+
         if (textbox.Text.Length == 2) FocusManager.SetFocus(CodeTextbox3);
 
         if(textbox.Text.Length == 0 && prevBoxLength2 == 0)
@@ -50,6 +65,14 @@ public class InviteDialogController : MonoBehaviour
 
     private void CodeTextbox3_Changed(Textbox textbox)
     {
+        var text = textbox.Text.Trim();
+        if (text != textbox.Text)
+        {
+            prevBoxLength3 = textbox.Text.Length;
+            textbox.Text = text;
+            return;
+        }
+
         if (textbox.Text.Length == 0 && prevBoxLength3 == 0)
         {
             CodeTextbox2.Text = CodeTextbox2.Text.Left(1);
