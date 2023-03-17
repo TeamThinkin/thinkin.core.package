@@ -7,6 +7,7 @@ public class Textbox : MonoBehaviour, IFocusItem, IHandlePointerEvent
 {
     [SerializeField] private TMPro.TMP_Text Label;
     [SerializeField] private GameObject CaretIndicator;
+    [SerializeField] private GameObject Highlight;
 
     public event Action<Textbox> Changed;
     public bool IsMultiline;
@@ -31,11 +32,21 @@ public class Textbox : MonoBehaviour, IFocusItem, IHandlePointerEvent
         set { _caretPosition = Mathf.Clamp(value, 0, Label.text.Length); }
     }
 
-    public bool IsFocused { get; private set; }
+    private bool _isFocused;
+    public bool IsFocused 
+    {
+        get { return _isFocused; }
+        private set
+        {
+            _isFocused = value;
+            Highlight.SetActive(value);
+        }
+    }
 
     private void Start()
     {
         CaretIndicator.SetActive(false);
+        IsFocused = false;
     }
 
     protected void OnDisable()
@@ -70,6 +81,7 @@ public class Textbox : MonoBehaviour, IFocusItem, IHandlePointerEvent
 
     public void OnFocusEnd()
     {
+        Keyboard.Close();
         Keyboard.OnCharacterKeyPressed -= Keyboard_OnKeyPressed;
         Keyboard.OnCommandKeyPressed -= Keyboard_OnCommandKeyPressed;
         CaretIndicator.SetActive(false);
