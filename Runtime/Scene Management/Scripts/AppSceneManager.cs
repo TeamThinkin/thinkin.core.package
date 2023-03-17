@@ -40,7 +40,7 @@ public class AppSceneManager
 
         OnEnvironmentLoaded?.Invoke();
 
-        if (useTransition) TransitionController.Instance.RevealScene();
+        if (useTransition) await TransitionController.Instance.RevealScene();
     }
 
     public static async Task LoadRemoteScene(string SceneUrl)

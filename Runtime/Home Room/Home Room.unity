@@ -1224,6 +1224,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Rectangular Tablet
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 14144739b94d5c542a10c1faa0c134d5, type: 3}
+      propertyPath: m_Layer
+      value: 5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 14144739b94d5c542a10c1faa0c134d5, type: 3}
 --- !u!4 &752561707 stripped
@@ -2189,6 +2193,36 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &1361335962 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 14144739b94d5c542a10c1faa0c134d5, type: 3}
+  m_PrefabInstance: {fileID: 752561706}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1361335963
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1361335962}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d36e1e3f9fc27d499e475b901f7ef5a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!65 &1361335964
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1361335962}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.0015977115, y: 0.0021634835, z: 0.000030344368}
+  m_Center: {x: -0.00000094002485, y: 1.1641532e-10, z: 5.1159077e-10}
 --- !u!1 &1423940425
 GameObject:
   m_ObjectHideFlags: 0

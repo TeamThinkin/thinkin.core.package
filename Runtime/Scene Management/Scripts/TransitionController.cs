@@ -13,8 +13,11 @@ public class TransitionController : MonoBehaviour
 
     public static TransitionController Instance { get; private set; }
 
-    private System.Action onSceneHiddenCallback;
+    //private System.Action onSceneHiddenCallback;
     private bool isHidePending;
+
+    //private System.Action onSceneRevealedCallback;
+    private bool isRevealPending;
 
     private void Awake()
     {
@@ -40,23 +43,37 @@ public class TransitionController : MonoBehaviour
         });
     }
 
-    public void HideScene(System.Action OnSceneHiddenCallback = null)
-    {
-        gameObject.SetActive(true);
-        this.onSceneHiddenCallback = OnSceneHiddenCallback;
+    //public void HideScene(System.Action OnSceneHiddenCallback = null)
+    //{
+    //    gameObject.SetActive(true);
+    //    this.onSceneHiddenCallback = OnSceneHiddenCallback;
 
-        TransitionAnimator.SetBool("IsSolid", true);
-    }
+    //    TransitionAnimator.SetBool("IsSolid", true);
+    //}
 
-    public void RevealScene()
+    //public void RevealScene()
+    //{
+    //    TransitionAnimator.SetBool("IsSolid", false);
+    //}
+
+    public async Task RevealScene()
     {
         TransitionAnimator.SetBool("IsSolid", false);
+        isRevealPending = true;
+
+        await Task.Run(() =>
+        {
+            while (isRevealPending)
+            {
+                Thread.Sleep(1);
+            }
+        });
     }
 
     public void OnSolidfiedEvent() //Called from Animation Event
     {
         isHidePending = false;
-        onSceneHiddenCallback?.Invoke();
+        //onSceneHiddenCallback?.Invoke();
         OnSceneHidden?.Invoke();
     }
 
@@ -64,5 +81,7 @@ public class TransitionController : MonoBehaviour
     {
         //gameObject.SetActive(false);
         itemRenderer.enabled = false;
+        isRevealPending = false;
+        //onSceneRevealedCallback?.Invoke();
     }
 }

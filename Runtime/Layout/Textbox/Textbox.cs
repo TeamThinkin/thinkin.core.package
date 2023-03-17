@@ -85,6 +85,7 @@ public class Textbox : MonoBehaviour, IFocusItem, IHandlePointerEvent
     public void OnFocusStart()
     {
         if (IsFocused) return;
+
         IsFocused = true;
 
         Keyboard.SetInput(this);
@@ -102,6 +103,7 @@ public class Textbox : MonoBehaviour, IFocusItem, IHandlePointerEvent
     public void OnFocusEnd()
     {
         IsFocused = false;
+        Keyboard.Close();
         Keyboard.OnCharacterKeyPressed -= Keyboard_OnKeyPressed;
         Keyboard.OnCommandKeyPressed -= Keyboard_OnCommandKeyPressed;
         CaretIndicator.SetActive(false);

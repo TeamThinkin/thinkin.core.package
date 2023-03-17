@@ -61,7 +61,7 @@ public class DestinationPresenter : MonoBehaviour
         RootPresenter = await DocumentManager.LoadDocumentIntoContainer(document, _contentContainer, false);
 
         OnDestinationLoaded?.Invoke();
-        _transitionController.RevealScene();
+        _transitionController.RevealScene(); //TODO: should this be awaited?
 
         releaseStashedPlayer();
         IsLoading = false;
