@@ -6,6 +6,7 @@ using UnityEngine;
 public class HomeRoomController : MonoBehaviour
 {
     [SerializeField] UserInfoPresenter UserPresenter;
+    [SerializeField] InviteDialogController InviteDialog;
 
     public static HomeRoomController Instance { get; private set; }
 
@@ -44,6 +45,6 @@ public class HomeRoomController : MonoBehaviour
 
     public void PromptUserForInviteCode()
     {
-        Debug.Log("Prompting user for invite code");
+        InviteDialog.ShowDialog();
     }
 }

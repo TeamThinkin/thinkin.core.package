@@ -225,6 +225,20 @@ public static class Extensions
         return string.IsNullOrEmpty(s);
     }
 
+    public static string Left(this string s, int Count)
+    {
+        if (s.IsNullOrEmpty()) return s;
+        Count = Count < s.Length ? Count : s.Length;
+        return s.Substring(0, Count);
+    }
+
+    public static string Right(this string s, int Count)
+    {
+        if (s.IsNullOrEmpty()) return s;
+        Count = Count < s.Length ? Count : s.Length;
+        return s.Substring(s.Length - Count);
+    }
+
     public static bool InvolvesPrimaryFingerTip(this Collision collision)
     {
         return collision.contacts.Any(i => i.otherCollider.gameObject.tag == "PointerFingerTip" || i.thisCollider.gameObject.tag == "PointerFingerTip");

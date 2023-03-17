@@ -126,7 +126,6 @@ GameObject:
   - component: {fileID: 8544906328309761334}
   - component: {fileID: 7706650274700687794}
   - component: {fileID: 370689999880359088}
-  - component: {fileID: 3639302742397937540}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -199,19 +198,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &3639302742397937540
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7844417385725885567}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &9142470441993001491
 GameObject:
   m_ObjectHideFlags: 0
@@ -432,16 +418,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8129f7cbe985de74f85b663ada260b8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  oneHanded: 1
-  handType: 0
-  HandStartTouch:
-    m_PersistentCalls:
-      m_Calls: []
-  HandStopTouch:
-    m_PersistentCalls:
-      m_Calls: []
   Label: {fileID: 9142470441993001492}
   CaretIndicator: {fileID: 4766548822152126226}
+  IsMultiline: 0
+  PromptText: 
 --- !u!65 &457454463011810471
 BoxCollider:
   m_ObjectHideFlags: 0

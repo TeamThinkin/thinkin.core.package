@@ -10,16 +10,28 @@ public class Textbox : MonoBehaviour, IFocusItem, IHandlePointerEvent
 
     public event Action<Textbox> Changed;
     public bool IsMultiline;
+    public string PromptText;
+    public bool IsLengthLimited;
+    public int MaxLength;
+
+    private float defaultCaretPosition;
+    private Renderer caretRendered;
 
     private IKeyboard Keyboard => AppControllerBase.Instance.Keyboard;
 
+    public bool IsFocused { get; private set; }
+
+    private string _text = "";
     public string Text
     {
-        get { return Label.text; }
+        get { return _text; }
         set 
         {
             if (value == Label.text) return;
-            Label.text = value;
+            if (value == null) value = "";
+
+            _text = IsLengthLimited ? value.Left(MaxLength) : value;
+            Label.text = _text;
             Changed?.Invoke(this);
         }
     }
@@ -31,11 +43,24 @@ public class Textbox : MonoBehaviour, IFocusItem, IHandlePointerEvent
         set { _caretPosition = Mathf.Clamp(value, 0, Label.text.Length); }
     }
 
-    public bool IsFocused { get; private set; }
+    private void Awake()
+    {
+        defaultCaretPosition = CaretIndicator.transform.localPosition.y;
+        caretRendered = CaretIndicator.GetComponentInChildren<Renderer>();
+    }
+
+    private void blinkCaret()
+    {
+        caretRendered.enabled = !caretRendered.enabled;
+    }
 
     private void Start()
     {
-        CaretIndicator.SetActive(false);
+        if (!IsFocused)
+        {
+            Label.text = PromptText;
+            CaretIndicator.SetActive(false);
+        }
     }
 
     protected void OnDisable()
@@ -49,7 +74,7 @@ public class Textbox : MonoBehaviour, IFocusItem, IHandlePointerEvent
 
     private void OnInteractionStart()
     {
-        Keyboard.SetInput(this);
+        FocusManager.SetFocus(this);
     }
 
     public void OnTriggerStart(IUIPointer Sender, RaycastHit RayInfo)
@@ -60,20 +85,28 @@ public class Textbox : MonoBehaviour, IFocusItem, IHandlePointerEvent
     public void OnFocusStart()
     {
         if (IsFocused) return;
+        IsFocused = true;
+
+        Keyboard.SetInput(this);
         Keyboard.OnCharacterKeyPressed += Keyboard_OnKeyPressed;
         Keyboard.OnCommandKeyPressed += Keyboard_OnCommandKeyPressed;
+
+        Label.text = Text;
         CaretPosition = Text.Length;
         updateVisualCaretPosition();
         CaretIndicator.SetActive(true);
-        IsFocused = true;
+        InvokeRepeating("blinkCaret", 0.1f, 0.65f);
+
     }
 
     public void OnFocusEnd()
     {
+        IsFocused = false;
         Keyboard.OnCharacterKeyPressed -= Keyboard_OnKeyPressed;
         Keyboard.OnCommandKeyPressed -= Keyboard_OnCommandKeyPressed;
         CaretIndicator.SetActive(false);
-        IsFocused = false;
+        CancelInvoke("blinkCaret");
+        if (Text.IsNullOrEmpty()) Label.text = PromptText;
     }
 
     private void Keyboard_OnKeyPressed(char character)
@@ -95,13 +128,23 @@ public class Textbox : MonoBehaviour, IFocusItem, IHandlePointerEvent
                 updateVisualCaretPosition();
                 break;
             case KeyCode.Backspace:
-                if (Text.Length == 0 || CaretPosition == 0) break;
+                if (Text.Length == 0 || CaretPosition == 0)
+                {
+                    Changed?.Invoke(this);
+                    break;
+                }
+
                 Text = Text.Substring(0, CaretPosition - 1) + Text.Substring(CaretPosition);
                 CaretPosition--;
                 updateVisualCaretPosition();
                 break;
             case KeyCode.Delete:
-                if (CaretPosition >= Text.Length || Text.Length == 0) break;
+                if (CaretPosition >= Text.Length || Text.Length == 0)
+                {
+                    Changed?.Invoke(this);
+                    break;
+                }
+
                 Text = Text.Substring(0, CaretPosition) + Text.Substring(CaretPosition + 1);
                 updateVisualCaretPosition();
                 break;
@@ -134,19 +177,21 @@ public class Textbox : MonoBehaviour, IFocusItem, IHandlePointerEvent
             {
                 var charInfo = textInfo.characterInfo[Label.text.Length - 1];
                 position = Label.transform.TransformPoint(charInfo.bottomRight);
+                CaretIndicator.transform.position = position;
             }
             else
             {
-                position = Label.transform.position;
+                CaretIndicator.transform.localPosition = Vector3.up * defaultCaretPosition;
             }
         }
         else
         {
             var charInfo = textInfo.characterInfo[CaretPosition];
             position = Label.transform.TransformPoint(charInfo.bottomLeft);
+            CaretIndicator.transform.position = position;
         }
 
-        CaretIndicator.transform.position = position;
+        
     }
 
     #region -- Unused Pointer Events --
