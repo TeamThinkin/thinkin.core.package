@@ -1,12 +1,11 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-
 public interface IKeyboard
 {
-    EditableText Text { get; }
-    IFocusItem CurrentFocusItem { get; }
-
-    void ShowForInput(IFocusItem Item);
+    void SetInput(IFocusItem Item);
     void Close();
+
+    event System.Action<char> OnCharacterKeyPressed;
+    event System.Action<KeyCode> OnCommandKeyPressed;
 }

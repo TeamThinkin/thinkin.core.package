@@ -9,6 +9,7 @@ public class Textbox : MonoBehaviour, IFocusItem, IHandlePointerEvent
     [SerializeField] private GameObject CaretIndicator;
 
     public event Action<Textbox> Changed;
+    public bool IsMultiline;
 
     private IKeyboard Keyboard => AppControllerBase.Instance.Keyboard;
 
@@ -23,27 +24,32 @@ public class Textbox : MonoBehaviour, IFocusItem, IHandlePointerEvent
         }
     }
 
+    private int _caretPosition;
+    public int CaretPosition
+    {
+        get { return _caretPosition; }
+        set { _caretPosition = Mathf.Clamp(value, 0, Label.text.Length); }
+    }
+
+    public bool IsFocused { get; private set; }
+
     private void Start()
     {
         CaretIndicator.SetActive(false);
     }
 
-    protected void OnDestroy()
-    {
-        Keyboard.Text.ValueChanged -= Text_ValueChanged;
-    }
-
     protected void OnDisable()
     {
-        #pragma warning disable CS0253 // Possible unintended reference comparison; right hand side needs cast
-        if (this == Keyboard.CurrentFocusItem)
+        if (IsFocused)
+        {
+            OnFocusEnd();
             Keyboard.Close();
-        #pragma warning restore CS0253 // Possible unintended reference comparison; right hand side needs cast
+        }
     }
 
     private void OnInteractionStart()
     {
-        Keyboard.ShowForInput(this);
+        Keyboard.SetInput(this);
     }
 
     public void OnTriggerStart(IUIPointer Sender, RaycastHit RayInfo)
@@ -51,46 +57,78 @@ public class Textbox : MonoBehaviour, IFocusItem, IHandlePointerEvent
         OnInteractionStart();
     }
 
-    private void Text_ValueChanged(EditableText keyboardText)
-    {
-        Text = keyboardText.Value;
-        updateCaretPosition();
-    }
-
-    public void KeyPressed(string Key, SpecialKeyboardKey SpecialKey)
-    {
-        switch (SpecialKey)
-        {
-            case SpecialKeyboardKey.Backspace:
-                Text = Text.Substring(0, Text.Length - 1);
-                break;
-            case SpecialKeyboardKey.None:
-                Text += Key;
-                break;
-        }
-    }
-
     public void OnFocusStart()
     {
-        Debug.Log("Focus start: " + gameObject.name);
-        Keyboard.Text.Set(Text);
-        Keyboard.Text.ValueChanged += Text_ValueChanged;
-        updateCaretPosition();
+        if (IsFocused) return;
+        Keyboard.OnCharacterKeyPressed += Keyboard_OnKeyPressed;
+        Keyboard.OnCommandKeyPressed += Keyboard_OnCommandKeyPressed;
+        CaretPosition = Text.Length;
+        updateVisualCaretPosition();
         CaretIndicator.SetActive(true);
+        IsFocused = true;
     }
 
     public void OnFocusEnd()
     {
-        Debug.Log("Focus end: " + gameObject.name);
-        Keyboard.Text.ValueChanged -= Text_ValueChanged;
+        Keyboard.OnCharacterKeyPressed -= Keyboard_OnKeyPressed;
+        Keyboard.OnCommandKeyPressed -= Keyboard_OnCommandKeyPressed;
         CaretIndicator.SetActive(false);
+        IsFocused = false;
     }
 
-    private void updateCaretPosition()
+    private void Keyboard_OnKeyPressed(char character)
+    {
+        Text = Text.Substring(0, CaretPosition) + character + Text.Substring(CaretPosition);
+        CaretPosition++;
+        updateVisualCaretPosition();
+    }
+
+    private void Keyboard_OnCommandKeyPressed(KeyCode key)
+    {
+        switch(key)
+        {
+            case KeyCode.KeypadEnter:
+            case KeyCode.Return:
+                if (!IsMultiline) break;
+                Text = Text.Substring(0, CaretPosition) + '\n' + Text.Substring(CaretPosition);
+                CaretPosition++;
+                updateVisualCaretPosition();
+                break;
+            case KeyCode.Backspace:
+                if (Text.Length == 0 || CaretPosition == 0) break;
+                Text = Text.Substring(0, CaretPosition - 1) + Text.Substring(CaretPosition);
+                CaretPosition--;
+                updateVisualCaretPosition();
+                break;
+            case KeyCode.Delete:
+                if (CaretPosition >= Text.Length || Text.Length == 0) break;
+                Text = Text.Substring(0, CaretPosition) + Text.Substring(CaretPosition + 1);
+                updateVisualCaretPosition();
+                break;
+            case KeyCode.LeftArrow:
+                CaretPosition--;
+                updateVisualCaretPosition();
+                break;
+            case KeyCode.RightArrow:
+                CaretPosition++;
+                updateVisualCaretPosition();
+                break;
+            case KeyCode.Home:
+                CaretPosition = 0;
+                updateVisualCaretPosition();
+                break;
+            case KeyCode.End:
+                CaretPosition = Text.Length;
+                updateVisualCaretPosition();
+                break;
+        }
+    }
+
+    private void updateVisualCaretPosition()
     {
         var textInfo = Label.GetTextInfo(Label.text);
         Vector3 position;
-        if(Keyboard.Text.CaretPosition >= Label.text.Length)
+        if (CaretPosition >= Label.text.Length)
         {
             if (Label.text.Length > 0)
             {
@@ -104,7 +142,7 @@ public class Textbox : MonoBehaviour, IFocusItem, IHandlePointerEvent
         }
         else
         {
-            var charInfo = textInfo.characterInfo[Keyboard.Text.CaretPosition];
+            var charInfo = textInfo.characterInfo[CaretPosition];
             position = Label.transform.TransformPoint(charInfo.bottomLeft);
         }
 

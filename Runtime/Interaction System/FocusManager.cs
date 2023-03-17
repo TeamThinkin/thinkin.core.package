@@ -4,19 +4,32 @@ using UnityEngine;
 
 public static class FocusManager
 {
-    public static IFocusItem CurrentFocusItem { get; private set; }
+    public static event System.Action<IFocusItem> OnFocusItemChanged;
+
+    private static IFocusItem _currentFocusItem;
+    public static IFocusItem CurrentFocusItem 
+    { 
+        get { return _currentFocusItem; }
+        private set
+        {
+            if (value == _currentFocusItem) return;
+
+            _currentFocusItem = value;
+            OnFocusItemChanged?.Invoke(value);
+        }
+    }
 
     public static void SetFocus(IFocusItem Item)
     {
         if (Item != CurrentFocusItem) ClearFocus();
 
         CurrentFocusItem = Item;
-        CurrentFocusItem.OnFocusStart();
+        CurrentFocusItem?.OnFocusStart();
     }
 
     public static void ClearFocus()
     {
-        if (CurrentFocusItem != null) CurrentFocusItem.OnFocusEnd();
+        CurrentFocusItem?.OnFocusEnd();
         CurrentFocusItem = null;
     }
 }

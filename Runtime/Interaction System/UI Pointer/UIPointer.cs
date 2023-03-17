@@ -154,6 +154,10 @@ public class UIPointer : MonoBehaviour, IUIPointer
                 Debug.LogException(ex);
             }
         }
+        else
+        {
+            FocusManager.SetFocus(null);
+        }
     }
 
     private void Provider_PrimaryButtonEnd()
