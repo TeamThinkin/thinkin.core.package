@@ -14,8 +14,17 @@ public class InviteDto
     [JsonProperty("userDisplayName")]
     public string UserDisplayName { get; set; }
 
+    [JsonProperty("avatarUrl")]
+    public string AvatarUrl { get; set; }
+
     [JsonProperty("destinationUrl")]
     public string DestinationUrl { get; set; }
+
+    [JsonProperty("destinationDisplayName")]
+    public string DestinationDisplayName { get; set; }
+
+    [JsonProperty("inviterDisplayName")]
+    public string InviterDisplayName { get; set; }
 }
 
 public class AddMapDestinationDto

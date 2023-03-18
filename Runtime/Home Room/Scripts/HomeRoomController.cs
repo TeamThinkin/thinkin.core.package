@@ -18,6 +18,7 @@ public class HomeRoomController : MonoBehaviour
     private void Start()
     {
         updateState();
+        InviteDialog.gameObject.SetActive(false);
         UserInfo.OnCurrentUserChanged += UserInfo_OnCurrentUserChanged;
     }
 

@@ -14,12 +14,23 @@ public class Textbox : MonoBehaviour, IFocusItem, IHandlePointerEvent
     public bool IsLengthLimited;
     public int MaxLength;
 
-    private float defaultCaretPosition;
+    
     private Renderer caretRendered;
 
     private IKeyboard Keyboard => AppControllerBase.Instance.Keyboard;
 
     public bool IsFocused { get; private set; }
+
+    private float? _defaultCaretPosition;
+    private float defaultCaretPosition
+    {
+        get
+        {
+            if (!_defaultCaretPosition.HasValue) _defaultCaretPosition = CaretIndicator.transform.localPosition.y;
+            return _defaultCaretPosition.Value;
+        }
+    }
+
 
     private string _text = "";
     public string Text
@@ -45,7 +56,6 @@ public class Textbox : MonoBehaviour, IFocusItem, IHandlePointerEvent
 
     private void Awake()
     {
-        defaultCaretPosition = CaretIndicator.transform.localPosition.y;
         caretRendered = CaretIndicator.GetComponentInChildren<Renderer>();
     }
 
