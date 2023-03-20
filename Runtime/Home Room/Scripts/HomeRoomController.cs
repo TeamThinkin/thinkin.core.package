@@ -7,6 +7,7 @@ public class HomeRoomController : MonoBehaviour
 {
     [SerializeField] UserInfoPresenter UserPresenter;
     [SerializeField] NewUserDialogController NewUserDialog;
+    [SerializeField] QuickLinksController QuickLinks;
 
     public static HomeRoomController Instance { get; private set; }
 
@@ -37,6 +38,7 @@ public class HomeRoomController : MonoBehaviour
         if (UserInfo.CurrentUser == null) return;
 
         UserPresenter.SetModel(UserInfo.CurrentUser);
+        QuickLinks.SetInfo();
     }
 
     public void OnChangeNameButtonPressed()

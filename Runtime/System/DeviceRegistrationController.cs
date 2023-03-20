@@ -22,8 +22,10 @@ public static class DeviceRegistrationController
         LegacyDeviceRegistrationController.ClearStoredInfo();
     }
 
-    public static async Task PersistUserInfo(UserInfo User)
+    public static async Task PersistUserInfo(UserInfo User = null)
     {
+        if (User == null) User = UserInfo.CurrentUser;
+
         var json = User.Serialize();
         await persistUserInfoToFile(json);
         persistUserInfoToUserPrefs(json);
