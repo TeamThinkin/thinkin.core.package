@@ -8,23 +8,14 @@ public static class CoreModule
     {
         var user = await DeviceRegistrationController.GetUserInfo() ?? UserInfo.UnknownUser;
 
-        if (user != UserInfo.UnknownUser)
-        {
-            await DeviceRegistrationController.PersistUserInfo(user);
-            //UserInfo.CurrentUser = user;
-
-            //await AppSceneManager.LoadLocalScene("Home Room", true);
-            //await DestinationPresenter.Instance.DisplayUrl(!string.IsNullOrEmpty(user.CurrentRoomUrl) ? user.CurrentRoomUrl : user.HomeRoomUrl); //TODO: this doesnt account for an empty Home Room Url
-
-        }
-        //else
-        //{
-            //UserInfo.CurrentUser = user;
-            //await AppSceneManager.LoadLocalScene("Login", true);
-        //}
+        if (user != UserInfo.UnknownUser) await DeviceRegistrationController.PersistUserInfo(user);
+        
         UserInfo.CurrentUser = user;
+
         await AppSceneManager.LoadLocalScene("Home Room", true);
+
         HomeRoomController.Instance.PromptUserForInviteCode(); //TODO: this needs to be refactored to only ask "new" users
+        //HomeRoomController.Instance.WelcomeNewUser(); //TODO: need to implement logic for when to call this
     }
 
     public static async Task LogoutUser()

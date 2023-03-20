@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InviteCodeEntryController : MonoBehaviour
+public class InviteCodeEntryPanel : TabPanel
 {
     [SerializeField] private Textbox CodeTextbox1;
     [SerializeField] private Textbox CodeTextbox2;
@@ -10,12 +10,12 @@ public class InviteCodeEntryController : MonoBehaviour
     [SerializeField] private GameObject CheckingIndicator;
     [SerializeField] private GameObject InvalidCodeIndicator;
 
-    private InviteDialogController parentDialog;
+    private NewUserDialogController parentDialog;
     private int prevBoxLength2, prevBoxLength3;
 
     private void Awake()
     {
-        parentDialog = GetComponentInParent<InviteDialogController>();
+        parentDialog = GetComponentInParent<NewUserDialogController>();
         CodeTextbox1.Changed += CodeTextbox1_Changed;
         CodeTextbox2.Changed += CodeTextbox2_Changed;
         CodeTextbox3.Changed += CodeTextbox3_Changed;
@@ -30,6 +30,9 @@ public class InviteCodeEntryController : MonoBehaviour
 
     private void OnEnable()
     {
+        CodeTextbox1.Text = "";
+        CodeTextbox2.Text = "";
+        CodeTextbox3.Text = "";
         CheckingIndicator.SetActive(false);
         InvalidCodeIndicator.SetActive(false);
         gameObject.SetActive(true);

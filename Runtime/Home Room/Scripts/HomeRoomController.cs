@@ -6,7 +6,7 @@ using UnityEngine;
 public class HomeRoomController : MonoBehaviour
 {
     [SerializeField] UserInfoPresenter UserPresenter;
-    [SerializeField] InviteDialogController InviteDialog;
+    [SerializeField] NewUserDialogController NewUserDialog;
 
     public static HomeRoomController Instance { get; private set; }
 
@@ -18,7 +18,7 @@ public class HomeRoomController : MonoBehaviour
     private void Start()
     {
         updateState();
-        InviteDialog.gameObject.SetActive(false);
+        NewUserDialog.gameObject.SetActive(false);
         UserInfo.OnCurrentUserChanged += UserInfo_OnCurrentUserChanged;
     }
 
@@ -46,6 +46,11 @@ public class HomeRoomController : MonoBehaviour
 
     public void PromptUserForInviteCode()
     {
-        InviteDialog.ShowDialog();
+        NewUserDialog.PromptForInvite();
+    }
+
+    public void WelcomeNewUser()
+    {
+        NewUserDialog.ShowIntroPanel();
     }
 }
