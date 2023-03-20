@@ -6,12 +6,12 @@ public class DoorSubPresenter : PortalSubPresenter
 {
     [SerializeField] private TMPro.TMP_Text Label;
     [SerializeField] private Animator StateAnimator;
-    
-    public override void Initialize(PortalElementPresenter ParentPortalPresenter)
+
+    public override void Initialize(string Title, string Href)
     {
-        base.Initialize(ParentPortalPresenter);
+        base.Initialize(Title, Href);
         StateAnimator?.SetBool("Is Partially Open", false);
-        Label.text = ParentPortalPresenter.Title;
+        Label.text = Title;
     }
 
     public override void OnHoverStart(IUIPointer Sender, RaycastHit RayInfo)

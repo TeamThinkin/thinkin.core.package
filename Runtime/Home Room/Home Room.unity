@@ -405,7 +405,7 @@ GameObject:
   - component: {fileID: 130937190}
   - component: {fileID: 130937189}
   m_Layer: 0
-  m_Name: Header (1)
+  m_Name: Header
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -574,7 +574,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3992289656521927020, guid: 442615b100e94344eb58089c9c916f08, type: 3}
       propertyPath: m_Name
-      value: Preview Orb (2)
+      value: Preview Orb
       objectReference: {fileID: 0}
     - target: {fileID: 7703628535089597907, guid: 442615b100e94344eb58089c9c916f08, type: 3}
       propertyPath: m_RootOrder
@@ -828,7 +828,7 @@ GameObject:
   m_Component:
   - component: {fileID: 306995966}
   m_Layer: 5
-  m_Name: Link (1)
+  m_Name: Invite Link
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -849,7 +849,7 @@ Transform:
   - {fileID: 130937188}
   - {fileID: 942746727}
   m_Father: {fileID: 702890448}
-  m_RootOrder: 3
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &319617770
 GameObject:
@@ -1205,9 +1205,9 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1838994481}
-  - {fileID: 1596074495}
-  - {fileID: 1185303063}
   - {fileID: 306995966}
+  - {fileID: 1185303063}
+  - {fileID: 1596074495}
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
@@ -1223,11 +1223,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0faeae802b1a6df4bb19477c106e78bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  InviteLinkContainer: {fileID: 306995965}
+  HomeRoomPreviewOrb: {fileID: 2054100888}
+  InviteDestinationPreviewOrb: {fileID: 942746730}
+  LastLocationPreviewOrb: {fileID: 710938772}
 --- !u!4 &710938769 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7703628535089597907, guid: 442615b100e94344eb58089c9c916f08, type: 3}
   m_PrefabInstance: {fileID: 225402441}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &710938772 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7681971885897311166, guid: 442615b100e94344eb58089c9c916f08, type: 3}
+  m_PrefabInstance: {fileID: 225402441}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1405c3bab3db68e49997e576f7f2b6d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &751156022
 GameObject:
   m_ObjectHideFlags: 0
@@ -1373,7 +1388,7 @@ GameObject:
   - component: {fileID: 772341067}
   - component: {fileID: 772341066}
   m_Layer: 0
-  m_Name: Header (3)
+  m_Name: Header
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1644,7 +1659,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7703628535089597907, guid: 442615b100e94344eb58089c9c916f08, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7703628535089597907, guid: 442615b100e94344eb58089c9c916f08, type: 3}
       propertyPath: m_LocalScale.x
@@ -1744,6 +1759,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7703628535089597907, guid: 442615b100e94344eb58089c9c916f08, type: 3}
   m_PrefabInstance: {fileID: 884172553}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &942746730 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7681971885897311166, guid: 442615b100e94344eb58089c9c916f08, type: 3}
+  m_PrefabInstance: {fileID: 884172553}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1405c3bab3db68e49997e576f7f2b6d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &949122688
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1942,7 +1968,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1185303063}
   m_Layer: 5
-  m_Name: Link (2)
+  m_Name: Home Room Link
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2415,7 +2441,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1596074495}
   m_Layer: 5
-  m_Name: Link (3)
+  m_Name: Last Location Link
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2436,7 +2462,7 @@ Transform:
   - {fileID: 772341065}
   - {fileID: 710938769}
   m_Father: {fileID: 702890448}
-  m_RootOrder: 1
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1638908993
 PrefabInstance:
@@ -2447,7 +2473,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3992289656521927020, guid: 442615b100e94344eb58089c9c916f08, type: 3}
       propertyPath: m_Name
-      value: Preview Orb (1)
+      value: Preview Orb
       objectReference: {fileID: 0}
     - target: {fileID: 7703628535089597907, guid: 442615b100e94344eb58089c9c916f08, type: 3}
       propertyPath: m_RootOrder
@@ -2557,7 +2583,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UserPresenter: {fileID: 751156024}
   NewUserDialog: {fileID: 3970361033596094259}
-  QuickLinks: {fileID: 0}
+  QuickLinks: {fileID: 702890449}
 --- !u!1 &1838994480
 GameObject:
   m_ObjectHideFlags: 0
@@ -2851,7 +2877,7 @@ GameObject:
   - component: {fileID: 1996151663}
   - component: {fileID: 1996151662}
   m_Layer: 0
-  m_Name: Header (2)
+  m_Name: Header
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3051,6 +3077,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7703628535089597907, guid: 442615b100e94344eb58089c9c916f08, type: 3}
   m_PrefabInstance: {fileID: 1638908993}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2054100888 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7681971885897311166, guid: 442615b100e94344eb58089c9c916f08, type: 3}
+  m_PrefabInstance: {fileID: 1638908993}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1405c3bab3db68e49997e576f7f2b6d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &67140884593429280
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3950,6 +3987,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _displayName: 
   _iconSprite: {fileID: 0}
+  QuickLinks: {fileID: 702890449}
   InviterLabel: {fileID: 899168175311808155}
   InviteeLabel: {fileID: 5152042387610999434}
   DestinationNameLabel: {fileID: 67140884593429280}

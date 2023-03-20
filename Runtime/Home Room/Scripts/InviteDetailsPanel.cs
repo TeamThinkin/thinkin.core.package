@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class InviteDetailsPanel : TabPanel
 {
+    [SerializeField] private QuickLinksController QuickLinks;
     [SerializeField] private TMPro.TMP_Text InviterLabel;
     [SerializeField] private TMPro.TMP_Text InviteeLabel;
     [SerializeField] private TMPro.TMP_Text DestinationNameLabel;
@@ -44,9 +45,15 @@ public class InviteDetailsPanel : TabPanel
         var newUser = new UserInfo();
         newUser.AvatarUrl = dto.AvatarUrl ?? UserInfo.CurrentUser.AvatarUrl;
         newUser.DisplayName = dto.UserDisplayName ?? UserInfo.CurrentUser.DisplayName;
-        newUser.HomeRoomUrl = dto.DestinationUrl;
+        newUser.HomeRoomInfo = new DocumentMetaInformation()
+        {
+            DocumentUrl = dto.DestinationUrl,
+            Title = dto.DestinationDisplayName
+        };        
+        
         UserInfo.CurrentUser = newUser;
         DeviceRegistrationController.PersistUserInfo();
+        QuickLinks.SetInviteDestination(dto.DestinationDisplayName, dto.DestinationUrl);
         parentDialog.NextPanel();
     }
 }

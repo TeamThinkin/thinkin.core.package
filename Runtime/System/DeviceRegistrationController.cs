@@ -12,7 +12,7 @@ public static class DeviceRegistrationController
 
     public static async Task<UserInfo> GetUserInfo()
     {
-        return await getUserInfoFromFile() ?? getUserInfoFromUserPrefs() ?? await LegacyDeviceRegistrationController.RegisterDeviceWithServer();
+        return await getUserInfoFromFile() ?? getUserInfoFromUserPrefs(); // ?? await LegacyDeviceRegistrationController.RegisterDeviceWithServer(); //TODO:this should be renabled before release
     }
 
     public static async Task ClearPersistedInfo()
@@ -41,6 +41,7 @@ public static class DeviceRegistrationController
     }
     private static async Task persistUserInfoToFile(string json)
     {
+        Debug.Log(filePath);
         await File.WriteAllTextAsync(filePath, json);
     }
     private static async Task clearUserInfoInFile()

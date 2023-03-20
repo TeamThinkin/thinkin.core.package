@@ -29,7 +29,14 @@ public static class FocusManager
 
     public static void ClearFocus()
     {
-        CurrentFocusItem?.OnFocusEnd();
+        //try
+        //{
+            if(CurrentFocusItem != null && CurrentFocusItem.gameObject != null) CurrentFocusItem?.OnFocusEnd();
+        //}
+        //catch(System.Exception ex)
+        //{
+        //    Debug.LogError(ex);
+        //}
         CurrentFocusItem = null;
     }
 }

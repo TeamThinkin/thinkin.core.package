@@ -14,7 +14,8 @@ public static class CoreModule
 
         await AppSceneManager.LoadLocalScene("Home Room", true);
 
-        HomeRoomController.Instance.PromptUserForInviteCode(); //TODO: this needs to be refactored to only ask "new" users
+
+        //HomeRoomController.Instance.PromptUserForInviteCode(); //TODO: this needs to be refactored to only ask "new" users
         //HomeRoomController.Instance.WelcomeNewUser(); //TODO: need to implement logic for when to call this
     }
 
@@ -22,5 +23,6 @@ public static class CoreModule
     {
         await DeviceRegistrationController.ClearPersistedInfo();
         UserInfo.CurrentUser = UserInfo.UnknownUser;
+        AppSceneManager.LoadLocalScene("Home Room", true);
     }
 }

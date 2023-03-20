@@ -16,12 +16,19 @@ public class PreviewOrbSubPresenter : PortalSubPresenter
     private static Material baseImageMaterial;
 
     private ILayoutItem layoutBounds;
+    private string imageUrl;
 
-    public override void Initialize(PortalElementPresenter ParentPortalPresenter)
+    public override void Initialize(string Title, string Href)
     {
-        base.Initialize(ParentPortalPresenter);
+        Initialize(Title, Href);
+    }
+
+    public void Initialize(string Title, string Href, string ImageUrl = null)
+    {
+        base.Initialize(Title, Href);
+        imageUrl = ImageUrl;
         Highlight.SetActive(false);
-        Label.text = ParentPortalPresenter.Title;
+        Label.text = Title;
 
         loadPreviewImage();
         layoutBounds = GetComponent<ILayoutItem>();
@@ -35,13 +42,16 @@ public class PreviewOrbSubPresenter : PortalSubPresenter
     private async void loadPreviewImage()
     {
         LoadingIndicator.SetActive(true);
-        var meta = await DocumentManager.FetchDocumentMeta(parentPortalPresenter.Href);
-        var imageTag = meta.FirstOrDefault(i => i.GetAttribute("name") == "intervrse:image360");
-        if(imageTag != null)
+        
+        if (imageUrl.IsNullOrEmpty())
         {
-            var imageUrl = imageTag.GetAttribute("content");
-            SphereRenderer.sharedMaterial = await getImageMaterial(imageUrl);
+            var meta = await DocumentManager.FetchDocumentMeta(Href);
+            var imageTag = meta.FirstOrDefault(i => i.GetAttribute("name") == "intervrse:image360");
+            if (imageTag != null) imageUrl = imageTag.GetAttribute("content");
         }
+
+        if(!imageUrl.IsNullOrEmpty()) SphereRenderer.sharedMaterial = await getImageMaterial(imageUrl);
+        
         LoadingIndicator.SetActive(false);
     }
 

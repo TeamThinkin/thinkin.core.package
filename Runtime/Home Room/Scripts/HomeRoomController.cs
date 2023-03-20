@@ -21,6 +21,11 @@ public class HomeRoomController : MonoBehaviour
         updateState();
         NewUserDialog.gameObject.SetActive(false);
         UserInfo.OnCurrentUserChanged += UserInfo_OnCurrentUserChanged;
+
+        if (UserInfo.CurrentUser.HomeRoomInfo.DocumentUrl.IsNullOrEmpty())
+            PromptUserForInviteCode();
+        else if (UserInfo.CurrentUser.CurrentRoomInfo.DocumentUrl.IsNullOrEmpty())
+            WelcomeNewUser();
     }
 
     private void OnDestroy()
@@ -38,7 +43,7 @@ public class HomeRoomController : MonoBehaviour
         if (UserInfo.CurrentUser == null) return;
 
         UserPresenter.SetModel(UserInfo.CurrentUser);
-        QuickLinks.SetInfo();
+        QuickLinks.UpdateInfo();
     }
 
     public void OnChangeNameButtonPressed()

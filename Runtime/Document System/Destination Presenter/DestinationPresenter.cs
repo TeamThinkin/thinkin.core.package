@@ -1,4 +1,5 @@
 using AngleSharp.Dom;
+using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,6 +7,20 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
+
+
+public struct DocumentMetaInformation
+{
+    [JsonProperty("title")]
+    public string Title { get; set; }
+
+    [JsonProperty("documentUrl")]
+    public string DocumentUrl { get; set; }
+
+    [JsonProperty("iconUrl")]
+    public string IconUrl { get; set; }
+}
+
 
 public class DestinationPresenter : MonoBehaviour
 {
@@ -24,10 +39,10 @@ public class DestinationPresenter : MonoBehaviour
     public IElementPresenter RootPresenter { get; private set; }
 
     public string CurrentUrl { get; private set; }
-    //public DocumentManager.PresenceInfoDto CurrentPresenceInfo { get; private set; }
-
+    
     public bool IsLoading { get; private set; }
 
+    public DocumentMetaInformation CurrentDocMetaInfo { get; private set; }
     
 
     private void Awake()
@@ -46,6 +61,7 @@ public class DestinationPresenter : MonoBehaviour
         CurrentUrl = Url;
         UrlChanged?.Invoke(Url);
 
+        FocusManager.ClearFocus();
         CurrentDestinationId = newRoomId;
 
         var documentTask = DocumentManager.FetchDocument(Url);
@@ -58,10 +74,13 @@ public class DestinationPresenter : MonoBehaviour
         _contentContainer.ClearChildren();
 
         var document = await documentTask;
+        CurrentDocMetaInfo = getMetaInfo(document.DocumentElement, Url);
         RootPresenter = await DocumentManager.LoadDocumentIntoContainer(document, _contentContainer, false);
 
         OnDestinationLoaded?.Invoke();
         _transitionController.RevealScene(); //TODO: should this be awaited?
+        UserInfo.CurrentUser.CurrentRoomInfo = CurrentDocMetaInfo;
+        DeviceRegistrationController.PersistUserInfo();
 
         releaseStashedPlayer();
         IsLoading = false;
@@ -70,6 +89,16 @@ public class DestinationPresenter : MonoBehaviour
     public void ResetCurrentDestination() //TODO: the logic between this and AppSceneManager.LoadLocalRoom probably needs some thought. This doesnt seem like a good way to accomplish this
     {
         CurrentDestinationId = null;
+    }
+
+
+    private static DocumentMetaInformation getMetaInfo(IElement document, string requestedUrl)
+    {
+        var meta = new DocumentMetaInformation();
+        meta.DocumentUrl = requestedUrl;
+        meta.Title = document.QuerySelector("head title").Text();
+        meta.IconUrl = document.QuerySelectorAll("meta").FirstOrDefault(i => i.GetAttribute("name") == "intervrse:image360")?.GetAttribute("content");
+        return meta;
     }
 
     private void stashPlayer()

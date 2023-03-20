@@ -16,15 +16,37 @@ public class UserInfo
     [JsonProperty("avatarUrl")]
     public string AvatarUrl { get; set; }
 
-    //public string AuthToken { get; set; }
+    [JsonProperty("homeRoomInfo")]
+    public DocumentMetaInformation HomeRoomInfo { get; set; } = new DocumentMetaInformation();
 
-    [JsonProperty("homeRoomUrl")]
-    public string HomeRoomUrl { get; set; }
+    [JsonProperty("currentRoom")]
+    public DocumentMetaInformation CurrentRoomInfo { get; set; } = new DocumentMetaInformation();
 
-    [JsonProperty("currentRoomUrl")]
-    public string CurrentRoomUrl { get; set; }
+    [Obsolete("Please access via HomeRoomInfo.DocumentUrl")]
+    [JsonIgnore]
+    public string HomeRoomUrl
+    {
+        get { return HomeRoomInfo.DocumentUrl; }
+        set 
+        {
+            var info = HomeRoomInfo;
+            info.DocumentUrl = value;
+            HomeRoomInfo = info;
+        }
+    }
 
-    //public string RootCollectionUrl => "user-" + Id;
+    [Obsolete("Please access via CurrentRoomInfo.DocumentUrl")]
+    [JsonIgnore]
+    public string CurrentRoomUrl
+    {
+        get { return CurrentRoomInfo.DocumentUrl; }
+        set
+        {
+            var info = CurrentRoomInfo;
+            info.DocumentUrl = value;
+            CurrentRoomInfo = info;
+        }
+    }
 
     public static event Action<UserInfo> OnCurrentUserChanged;
     private static UserInfo _unknownUser = new UserInfo()
@@ -45,6 +67,7 @@ public class UserInfo
             OnCurrentUserChanged?.Invoke(_currentUser);
         }
     }
+
 
     public static bool IsLoggedIn => CurrentUser != null && CurrentUser != UnknownUser;
 
