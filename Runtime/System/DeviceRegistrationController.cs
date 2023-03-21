@@ -41,7 +41,6 @@ public static class DeviceRegistrationController
     }
     private static async Task persistUserInfoToFile(string json)
     {
-        Debug.Log(filePath);
         await File.WriteAllTextAsync(filePath, json);
     }
     private static async Task clearUserInfoInFile()

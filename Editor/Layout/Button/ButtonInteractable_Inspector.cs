@@ -16,7 +16,9 @@ public class ButtonInteractable_Inspector : Editor
         {
             label.text = EditorGUILayout.TextField(label.text);
             label.ForceMeshUpdate();
+            EditorUtility.SetDirty(label);
         }
+        
         base.OnInspectorGUI();
     }
 }
