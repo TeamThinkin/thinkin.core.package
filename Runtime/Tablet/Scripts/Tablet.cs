@@ -34,7 +34,7 @@ public class Tablet : MonoBehaviour, ISpawnableItem
 
         //BuildLabel.text = Application.version + ", " + GeneratedInfo.BundleVersionCode;//TODO: commented out during the Package refactor
         loadContentPanelButtons();
-        showPanel(tabButtons[0].Key as TabPanel);
+        _ = showPanel(tabButtons[0].Key as TabPanel);
 
         //ItemSpawnObserver.NotifyItemSpawned(this.gameObject);
     }
@@ -72,7 +72,7 @@ public class Tablet : MonoBehaviour, ISpawnableItem
     {
         if (currentPanel != null && panelPrefab.DisplayName == currentPanel.DisplayName) return;
 
-        hidePanel();
+        _ = hidePanel();
 
         currentPanel = Instantiate(panelPrefab);
         currentPanel.transform.SetParent(PanelContainer.SceneChildrenContainer.transform);
@@ -98,13 +98,10 @@ public class Tablet : MonoBehaviour, ISpawnableItem
         });
 
         Destroy(panel.gameObject);
-
-        //Destroy(currentPanel.gameObject);
-        //currentPanel = null;
     }
 
     private void Button_OnInteractionEvent(ButtonInteractable sender)
     {
-        showPanel(sender.Key as TabPanel);
+        _ = showPanel(sender.Key as TabPanel);
     }
 }

@@ -339,7 +339,7 @@ public static class Extensions
         }
         catch (System.Exception ex)
         {
-            Debug.LogError("Invalid vector string (Expecting {0.1,0.2,0.3}): " + text);
+            Debug.LogError("Invalid vector string (Expecting {0.1,0.2,0.3}): " + text + "\n" + ex.Message);
             return null;
         }
     }
@@ -390,7 +390,7 @@ public static class Extensions
         }
         catch (System.Exception ex)
         {
-            Debug.LogError("Invalid quaternion string (Expecting {0.1,0.2,0.3,0.4}): " + text);
+            Debug.LogError("Invalid quaternion string (Expecting {0.1,0.2,0.3,0.4}): " + text + "\n" + ex.Message);
             return null;
         }
     }

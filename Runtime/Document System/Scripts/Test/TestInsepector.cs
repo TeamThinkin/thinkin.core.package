@@ -9,6 +9,6 @@ public class TestInsepector : MonoBehaviour
 
     void Start()
     {
-        DocInspector.DisplayUrl(Url);    
+        _ = DocInspector.DisplayUrl(Url);    
     }
 }

@@ -32,7 +32,7 @@ public class UserInfoPresenter : MonoBehaviour
     {
         DisplayNameLabel.text = DisplayNameTextbox.Text;
         UserInfo.CurrentUser.DisplayName = DisplayNameTextbox.Text;
-        DeviceRegistrationController.PersistUserInfo();
+        _ = DeviceRegistrationController.PersistUserInfo();
         DisplayModeContainer.SetActive(true);
         EditModeContainer.SetActive(false);
     }

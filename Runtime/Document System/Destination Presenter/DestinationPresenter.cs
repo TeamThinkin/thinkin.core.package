@@ -74,8 +74,6 @@ public class DestinationPresenter : MonoBehaviour
 
         releaseStashedPlayer();
         IsLoading = false;
-
-        NavHistory.Dump();
     }
 
     public async Task NavigateBack()

@@ -143,8 +143,10 @@ public static class LegacyDeviceRegistrationController
                 AvatarUrl = userDto.AvatarUrl,
                 DisplayName = userDto.DisplayName,
                 //AuthToken = userDto.Token,
+#pragma warning disable CS0618 // Type or member is obsolete
                 HomeRoomUrl = userDto.HomeRoomUrl,
                 CurrentRoomUrl = userDto.CurrentRoomUrl
+#pragma warning restore CS0618 // Type or member is obsolete
             };
             return user;
             //UserInfo.CurrentUser = user;

@@ -15,7 +15,7 @@ public class SurfaceElementPresenter : ElementPresenterBase
         get => layoutSurface; 
         protected set
         {
-            Debug.LogWarning("Cannot set LayoutContainerInfo on SurfaceElementPresenter. It is handled internally");
+            //Debug.LogWarning("Cannot set LayoutContainerInfo on SurfaceElementPresenter. It is handled internally");
         }
     }
 

@@ -109,7 +109,7 @@ public class InviteCodeEntryPanel : TabPanel
 
         if (inviteInfo != null)
         {
-            parentDialog.ShowInviteDetails(inviteInfo);
+            await parentDialog.ShowInviteDetails(inviteInfo);
         }
         else
         {

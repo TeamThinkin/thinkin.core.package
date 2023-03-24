@@ -26,7 +26,7 @@ public abstract class PortalSubPresenter : MonoBehaviour, IHandlePointerEvent
 
     public virtual void OnTriggerStart(IUIPointer Sender, RaycastHit RayInfo)
     {
-        ActivatePortal();
+        _ = ActivatePortal();
     }
 
     public async Task ActivatePortal()

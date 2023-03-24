@@ -9,8 +9,10 @@ public class CameraPanel : TabPanel
 
     private Camera activeCamera;
 
-    void Start()
+    override protected void Start()
     {
+        base.Start();
+
         FrontCamera.gameObject.SetActive(false);
         BackCamera.gameObject.SetActive(false);
         activateCamera(FrontCamera);

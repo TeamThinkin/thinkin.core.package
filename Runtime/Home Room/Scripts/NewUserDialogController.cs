@@ -22,7 +22,7 @@ public class NewUserDialogController : MonoBehaviour
         IntroPanelBackButton.SetActive(true);
         gameObject.SetActive(true);
 
-        showPanel(InviteCodeEntryPanel);
+        _ = showPanel(InviteCodeEntryPanel);
     }
 
     public void ShowIntroPanel()
@@ -32,8 +32,8 @@ public class NewUserDialogController : MonoBehaviour
         IntroPanel.gameObject.SetActive(false);
         IntroPanelBackButton.SetActive(false);
         gameObject.SetActive(true);
-        
-        showPanel(IntroPanel);
+
+        _ = showPanel(IntroPanel);
     }
 
     public void CloseDialog()
@@ -41,31 +41,31 @@ public class NewUserDialogController : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    public void NextPanel()
+    public async Task NextPanel()
     {
-        showPanel(IntroPanel);
+        await showPanel(IntroPanel);
     }
 
-    public void PrevPanel()
+    public async Task PrevPanel()
     {
         if (currentPanel == InviteDetailsPanel)
-            showPanel(InviteCodeEntryPanel);
+            await showPanel(InviteCodeEntryPanel);
         else if (currentPanel == IntroPanel)
-            showPanel(InviteDetailsPanel.HasDetails ? InviteDetailsPanel : InviteCodeEntryPanel);
+            await showPanel(InviteDetailsPanel.HasDetails ? InviteDetailsPanel : InviteCodeEntryPanel);
     }
 
-    public void ShowInviteDetails(InviteDto InviteDetailsDto)
+    public async Task ShowInviteDetails(InviteDto InviteDetailsDto)
     {
         InviteCodeEntryPanel.gameObject.SetActive(false);
         InviteDetailsPanel.SetDetails(InviteDetailsDto);
-        showPanel(InviteDetailsPanel);
+        await showPanel(InviteDetailsPanel);
     }
 
     private async Task showPanel(TabPanel panel)
     {
         if (currentPanel == panel) return;
 
-        hidePanel();
+        _ = hidePanel();
 
         currentPanel = panel;
         currentPanel.gameObject.SetActive(true);

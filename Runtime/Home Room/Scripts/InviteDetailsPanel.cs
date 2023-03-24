@@ -52,8 +52,8 @@ public class InviteDetailsPanel : TabPanel
         };        
         
         UserInfo.CurrentUser = newUser;
-        DeviceRegistrationController.PersistUserInfo();
+        _ = DeviceRegistrationController.PersistUserInfo();
         QuickLinks.SetInviteDestination(dto.DestinationDisplayName, dto.DestinationUrl);
-        parentDialog.NextPanel();
+        _ = parentDialog.NextPanel();
     }
 }

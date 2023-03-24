@@ -13,7 +13,7 @@ public class AppSceneManager
     public static event Action OnEnvironmentUnloaded;
 
     private static AssetBundle currentAssetBundle;
-    private static bool currentSceneIsRemote;
+    //private static bool currentSceneIsRemote;
     private static string currentScene;
     private static string currentSceneUrl;
     private static string currentCatalogUrl;
@@ -35,7 +35,7 @@ public class AppSceneManager
 
         currentScene = SceneName;
         currentSceneUrl = null;
-        currentSceneIsRemote = false;
+        //currentSceneIsRemote = false;
         isLoading = false;
 
         OnEnvironmentLoaded?.Invoke();
@@ -52,7 +52,7 @@ public class AppSceneManager
             isLoading = true;
             OnEnvironmentUnloaded?.Invoke();
             currentScene = SceneUrl;
-            currentSceneIsRemote = true;
+            //currentSceneIsRemote = true;
             await loadRemoteScene(SceneUrl);
             isLoading = false;
         }
@@ -82,7 +82,7 @@ public class AppSceneManager
 
         currentScene = scenePath;
         currentSceneUrl = SceneUrl;
-        currentSceneIsRemote = true;
+        //currentSceneIsRemote = true;
     }
 
     private static void disableExtraCameras()

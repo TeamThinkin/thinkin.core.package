@@ -102,7 +102,7 @@ public class MapPanel : TabPanel
         populateMap(selectedMapUrl);
     }
 
-    private async void loadMapList()
+    private void loadMapList()
     {
         LoadingIndicator.SetActive(true);
 

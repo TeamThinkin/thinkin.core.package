@@ -17,7 +17,6 @@ public class DoorSubPresenter : PortalSubPresenter
     public override void OnHoverStart(IUIPointer Sender, RaycastHit RayInfo)
     {
         base.OnHoverStart(Sender, RayInfo);
-        Debug.Log("Door hover start");
         StateAnimator?.SetBool("Is Partially Open", true);
     }
 

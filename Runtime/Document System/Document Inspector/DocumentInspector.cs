@@ -15,12 +15,12 @@ public class DocumentInspector : MonoBehaviour
         transform.ClearChildren();
 
         var document = await documentTask;
-        await loadDocument(document);
+        loadDocument(document);
 
         Debug.Log("Inspector display complete");
     }
 
-    private async Task loadDocument(IDocument Document)
+    private void loadDocument(IDocument Document)
     {
         //var rootPresenter = ElementPresenterFactory.Instantiate(typeof(RootPresenter), Document.DocumentElement, null);
         //rootPresenter.transform.SetParent(transform);

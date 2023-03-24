@@ -191,19 +191,19 @@ public class DispenserElementPresenter : ElementPresenterBase
         var left = Scroll - width / 2;
         var right = Scroll + width / 2;
 
-        if (true) //IsPolar)
-        {
-            var circumference = LayoutReference.localPosition.y * 2 * Mathf.PI;
-            var rot = (Scroll / circumference) * 360;
+        //if (true) //IsPolar)
+        //{
+        var circumference = LayoutReference.localPosition.y * 2 * Mathf.PI;
+        var rot = (Scroll / circumference) * 360;
             
-            ContentContainer.localPosition = Vector3.zero;
-            ContentContainer.localRotation = Quaternion.Euler(0, 180, 0); // rot);
-        }
-        else
-        {
-            ContentContainer.localPosition = Vector3.right * Scroll;
-            ContentContainer.localRotation = Quaternion.Euler(0, 180, 0);
-        }
+        ContentContainer.localPosition = Vector3.zero;
+        ContentContainer.localRotation = Quaternion.Euler(0, 180, 0); // rot);
+        //}
+        //else
+        //{
+        //    ContentContainer.localPosition = Vector3.right * Scroll;
+        //    ContentContainer.localRotation = Quaternion.Euler(0, 180, 0);
+        //}
 
         foreach (var item in items)
         {
