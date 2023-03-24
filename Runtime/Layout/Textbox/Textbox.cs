@@ -8,13 +8,15 @@ public class Textbox : MonoBehaviour, IFocusItem, IHandlePointerEvent
     [SerializeField] private TMPro.TMP_Text Label;
     [SerializeField] private GameObject CaretIndicator;
 
-    public event Action<Textbox> Changed;
+    public event Action<Textbox> OnChanged;
+    public event Action<Textbox> OnEnterPressed;
+    public event Action<Textbox> OnFocusLost;
+
     public bool IsMultiline;
     public string PromptText;
     public bool IsLengthLimited;
     public int MaxLength;
 
-    
     private Renderer caretRendered;
 
     private IKeyboard Keyboard => AppControllerBase.Instance.Keyboard;
@@ -39,11 +41,11 @@ public class Textbox : MonoBehaviour, IFocusItem, IHandlePointerEvent
         set 
         {
             if (value == Label.text) return;
-            if (value == null) value = "";
+            if (value == null) value = string.Empty;
 
             _text = IsLengthLimited ? value.Left(MaxLength) : value;
             Label.text = _text;
-            Changed?.Invoke(this);
+            OnChanged?.Invoke(this);
         }
     }
 
@@ -68,7 +70,7 @@ public class Textbox : MonoBehaviour, IFocusItem, IHandlePointerEvent
     {
         if (!IsFocused)
         {
-            Label.text = PromptText;
+            if(Text.IsNullOrEmpty()) Label.text = PromptText;
             CaretIndicator.SetActive(false);
         }
     }
@@ -119,6 +121,8 @@ public class Textbox : MonoBehaviour, IFocusItem, IHandlePointerEvent
         CaretIndicator.SetActive(false);
         CancelInvoke("blinkCaret");
         if (Text.IsNullOrEmpty()) Label.text = PromptText;
+
+        OnFocusLost?.Invoke(this);
     }
 
     private void Keyboard_OnKeyPressed(char character)
@@ -134,7 +138,12 @@ public class Textbox : MonoBehaviour, IFocusItem, IHandlePointerEvent
         {
             case KeyCode.KeypadEnter:
             case KeyCode.Return:
-                if (!IsMultiline) break;
+                if (!IsMultiline)
+                {
+                    OnEnterPressed?.Invoke(this);
+                    break;
+                }
+
                 Text = Text.Substring(0, CaretPosition) + '\n' + Text.Substring(CaretPosition);
                 CaretPosition++;
                 updateVisualCaretPosition();
@@ -142,7 +151,7 @@ public class Textbox : MonoBehaviour, IFocusItem, IHandlePointerEvent
             case KeyCode.Backspace:
                 if (Text.Length == 0 || CaretPosition == 0)
                 {
-                    Changed?.Invoke(this);
+                    OnChanged?.Invoke(this);
                     break;
                 }
 
@@ -153,7 +162,7 @@ public class Textbox : MonoBehaviour, IFocusItem, IHandlePointerEvent
             case KeyCode.Delete:
                 if (CaretPosition >= Text.Length || Text.Length == 0)
                 {
-                    Changed?.Invoke(this);
+                    OnChanged?.Invoke(this);
                     break;
                 }
 

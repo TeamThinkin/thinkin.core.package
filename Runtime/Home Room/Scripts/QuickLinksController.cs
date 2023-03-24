@@ -13,7 +13,7 @@ public class QuickLinksController : MonoBehaviour
 
     public void UpdateInfo()
     {
-        updateLink(UserInfo.CurrentUser.HomeRoomInfo, HomeRoomPreviewOrb);
+        //updateLink(UserInfo.CurrentUser.HomeRoomInfo, HomeRoomPreviewOrb);
         updateLink(UserInfo.CurrentUser.CurrentRoomInfo, LastLocationPreviewOrb);
         updateLink(new DocumentMetaInformation() { Title = inviteDestinationTitle, DocumentUrl = inviteDestinationUrl }, InviteDestinationPreviewOrb);
     }

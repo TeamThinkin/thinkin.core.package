@@ -1,5 +1,4 @@
 using AngleSharp.Dom;
-using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,22 +7,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 
-
-public struct DocumentMetaInformation
-{
-    [JsonProperty("title")]
-    public string Title { get; set; }
-
-    [JsonProperty("documentUrl")]
-    public string DocumentUrl { get; set; }
-
-    [JsonProperty("iconUrl")]
-    public string IconUrl { get; set; }
-}
-
-
 public class DestinationPresenter : MonoBehaviour
 {
+    private const int MaxHistoryItems = 3;
     public static event Action<string> UrlChanged;
     public static event Action OnDestinationLoaded;
     public static event Action OnDestinationUnloaded;
@@ -39,10 +25,12 @@ public class DestinationPresenter : MonoBehaviour
     public IElementPresenter RootPresenter { get; private set; }
 
     public string CurrentUrl { get; private set; }
-    
+        
     public bool IsLoading { get; private set; }
 
     public DocumentMetaInformation CurrentDocMetaInfo { get; private set; }
+
+    public NavigationHistory NavHistory = new NavigationHistory();
     
 
     private void Awake()
@@ -50,12 +38,12 @@ public class DestinationPresenter : MonoBehaviour
         Instance = this;
     }
 
-    public async Task DisplayUrl(string Url)
+    public async Task DisplayUrl(string Url, bool AddToHistory = true, bool ignoreCurrentDestination = false)
     {
         //NOTE: Assumes Urls are fully formed and not relative links
 
         var newRoomId = Url.GetHashCode();
-        if (newRoomId == CurrentDestinationId) return;
+        if (!ignoreCurrentDestination && newRoomId == CurrentDestinationId) return;
 
         IsLoading = true;
         CurrentUrl = Url;
@@ -75,22 +63,40 @@ public class DestinationPresenter : MonoBehaviour
 
         var document = await documentTask;
         CurrentDocMetaInfo = getMetaInfo(document.DocumentElement, Url);
+        if(AddToHistory) NavHistory.AddToHistory(CurrentDocMetaInfo);
         RootPresenter = await DocumentManager.LoadDocumentIntoContainer(document, _contentContainer, false);
 
         OnDestinationLoaded?.Invoke();
-        _transitionController.RevealScene(); //TODO: should this be awaited?
+        _ = _transitionController.RevealScene(); //TODO: should this be awaited?
+
         UserInfo.CurrentUser.CurrentRoomInfo = CurrentDocMetaInfo;
-        DeviceRegistrationController.PersistUserInfo();
+        _ = DeviceRegistrationController.PersistUserInfo();
 
         releaseStashedPlayer();
         IsLoading = false;
+
+        NavHistory.Dump();
+    }
+
+    public async Task NavigateBack()
+    {
+        await NavHistory.NavigateBack(i => DisplayUrl(i.DocumentUrl, false));
+    }
+
+    public async Task NavigateForward()
+    {
+        await NavHistory.NavigateForward(i => DisplayUrl(i.DocumentUrl, false));
+    }
+
+    public async Task Refresh()
+    {
+        await DisplayUrl(CurrentUrl, false, true);
     }
 
     public void ResetCurrentDestination() //TODO: the logic between this and AppSceneManager.LoadLocalRoom probably needs some thought. This doesnt seem like a good way to accomplish this
     {
         CurrentDestinationId = null;
     }
-
 
     private static DocumentMetaInformation getMetaInfo(IElement document, string requestedUrl)
     {
@@ -120,6 +126,7 @@ public class DestinationPresenter : MonoBehaviour
         playerBody.isKinematic = false;
     }
 
+
     //private async Task loadDocument(IDocument Document)
     //{
     //    RootPresenter = ElementPresenterFactory.Instantiate(typeof(RootPresenter), Document.DocumentElement, null);
@@ -127,10 +134,10 @@ public class DestinationPresenter : MonoBehaviour
     //    RootPresenter.gameObject.name = "Root";
 
     //    traverseDOMforPresenters(Document.DocumentElement, RootPresenter);
-        
+
     //    bool hasEnviornment = RootPresenter.All().Any(i => i is EnvironmentElementPresenter);
     //    if(!hasEnviornment) await AppSceneManager.LoadLocalScene("Empty Room");
-        
+
     //    await Task.WhenAll(RootPresenter.All().Select(i => i.Initialize()));
     //}
 

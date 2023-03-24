@@ -5,24 +5,35 @@ using UnityEngine;
 
 public class MapPanel : TabPanel
 {
+    [SerializeField] private Textbox UrlTextbox;
     [SerializeField] private DropDownBox MapsDropDownBox;
     [SerializeField] private GameObject MapContents;
     [SerializeField] private GameObject LoadingIndicator;
     
     private string selectedMapUrl;
 
+    private void Awake()
+    {
+        MapsDropDownBox.SelectedItemChanged += MapsDropDownBox_SelectedItemChanged;
+        UrlTextbox.OnEnterPressed += UrlTextbox_OnEnterPressed;
+        UrlTextbox.OnFocusLost += UrlTextbox_OnFocusLost;
+    }
+
     protected override void OnShow()
     {
         base.OnShow();
 
-        MapsDropDownBox.SelectedItemChanged += MapsDropDownBox_SelectedItemChanged;
+        UrlTextbox.Text = DestinationPresenter.Instance.CurrentUrl;
+
         loadMapList();
         UserInfo.OnCurrentUserChanged += UserInfo_OnCurrentUserChanged;
         DestinationPresenter.UrlChanged += DestinationPresenter_UrlChanged;
+        
     }
 
     protected override void OnHide()
     {
+        Debug.Log("Map panel hide");
         base.OnHide();
         UserInfo.OnCurrentUserChanged -= UserInfo_OnCurrentUserChanged;
         DestinationPresenter.UrlChanged -= DestinationPresenter_UrlChanged;
@@ -32,12 +43,43 @@ public class MapPanel : TabPanel
     {
         UserInfo.OnCurrentUserChanged -= UserInfo_OnCurrentUserChanged;
         MapsDropDownBox.SelectedItemChanged -= MapsDropDownBox_SelectedItemChanged;
+        UrlTextbox.OnEnterPressed -= UrlTextbox_OnEnterPressed;
+        UrlTextbox.OnFocusLost -= UrlTextbox_OnFocusLost;
     }
 
-    //public async void NavigateHome()
-    //{
-    //    await DestinationPresenter.Instance.DisplayUrl(UserInfo.CurrentUser.HomeRoomUrl);
-    //}
+    public async void NavigateHome()
+    {
+        //await DestinationPresenter.Instance.DisplayUrl(UserInfo.CurrentUser.HomeRoomUrl);
+        await AppSceneManager.LoadLocalScene("Home Room", true);
+    }
+
+    public async void NavigateBack()
+    {
+        await DestinationPresenter.Instance.NavigateBack();
+    }
+
+    public async void NavigateForward()
+    {
+        await DestinationPresenter.Instance.NavigateForward();
+    }
+
+    public async void RefreshPage()
+    {
+        await DestinationPresenter.Instance.Refresh();
+    }
+
+    private void UrlTextbox_OnFocusLost(Textbox obj)
+    {
+        Debug.Log("url focus lost");
+    }
+
+    private async void UrlTextbox_OnEnterPressed(Textbox obj)
+    {
+        Debug.Log("url enter pressed: " + obj.Text);
+        FocusManager.ClearFocus();
+        await DestinationPresenter.Instance.DisplayUrl(UrlTextbox.Text);
+    }
+
 
     private void UserInfo_OnCurrentUserChanged(UserInfo obj)
     {
@@ -45,8 +87,9 @@ public class MapPanel : TabPanel
     }
 
 
-    private void DestinationPresenter_UrlChanged(string obj)
+    private void DestinationPresenter_UrlChanged(string newUrl)
     {
+        UrlTextbox.Text = newUrl;
         loadMapList();
     }
 

@@ -16,16 +16,16 @@ public class InviteCodeEntryPanel : TabPanel
     private void Awake()
     {
         parentDialog = GetComponentInParent<NewUserDialogController>();
-        CodeTextbox1.Changed += CodeTextbox1_Changed;
-        CodeTextbox2.Changed += CodeTextbox2_Changed;
-        CodeTextbox3.Changed += CodeTextbox3_Changed;
+        CodeTextbox1.OnChanged += CodeTextbox1_Changed;
+        CodeTextbox2.OnChanged += CodeTextbox2_Changed;
+        CodeTextbox3.OnChanged += CodeTextbox3_Changed;
     }
 
     private void OnDestroy()
     {
-        CodeTextbox1.Changed -= CodeTextbox1_Changed;
-        CodeTextbox2.Changed -= CodeTextbox2_Changed;
-        CodeTextbox3.Changed -= CodeTextbox3_Changed;
+        CodeTextbox1.OnChanged -= CodeTextbox1_Changed;
+        CodeTextbox2.OnChanged -= CodeTextbox2_Changed;
+        CodeTextbox3.OnChanged -= CodeTextbox3_Changed;
     }
 
     private void OnEnable()
