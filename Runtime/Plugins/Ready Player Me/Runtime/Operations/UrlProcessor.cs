@@ -46,7 +46,7 @@ namespace ReadyPlayerMe
             if (LocalDirectory == null)
             {
                 #if UNITY_EDITOR
-                    Debug.LogWarning("UrlProcessor.CreateFromUrl: LocalDirectory for local paths is not set. Defaulting to EditorDefaultLocalDirectory");
+                    //Debug.LogWarning("UrlProcessor.CreateFromUrl: LocalDirectory for local paths is not set. Defaulting to EditorDefaultLocalDirectory");
                     LocalDirectory = EditorDefaultLocalDirectory;
                 #else
                     Debug.LogWarning("UrlProcessor.CreateFromUrl: LocalDirectory for local paths is not set. Defaulting to RuntimeDefaultLocalDirectory");

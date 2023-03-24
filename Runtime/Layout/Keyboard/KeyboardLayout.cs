@@ -32,5 +32,6 @@ public enum SpecialKeyboardKey
     Backspace,
     Delete,
     Shift,
-    Close
+    Close,
+    Enter
 }

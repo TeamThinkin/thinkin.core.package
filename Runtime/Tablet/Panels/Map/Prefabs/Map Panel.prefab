@@ -119,15 +119,24 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9142470441993001492, guid: 9072e18bf313f684587ba0ff797990fd, type: 3}
       propertyPath: m_text
-      value: http://current.location/bar
+      value: http://current.location/bar/this/is/a/really/long/url/here we really
+        go its getting to be stupid long what with this and that
       objectReference: {fileID: 0}
     - target: {fileID: 9142470441993001492, guid: 9072e18bf313f684587ba0ff797990fd, type: 3}
       propertyPath: m_fontSize
-      value: 24.3
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 9142470441993001492, guid: 9072e18bf313f684587ba0ff797990fd, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 9142470441993001492, guid: 9072e18bf313f684587ba0ff797990fd, type: 3}
+      propertyPath: m_overflowMode
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 9142470441993001492, guid: 9072e18bf313f684587ba0ff797990fd, type: 3}
       propertyPath: m_enableAutoSizing
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9142470441993001494, guid: 9072e18bf313f684587ba0ff797990fd, type: 3}
       propertyPath: m_SizeDelta.x
@@ -135,7 +144,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9142470441993001494, guid: 9072e18bf313f684587ba0ff797990fd, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 2.72
+      value: 2.8
       objectReference: {fileID: 0}
     - target: {fileID: 9142470443536514140, guid: 9072e18bf313f684587ba0ff797990fd, type: 3}
       propertyPath: m_Name
