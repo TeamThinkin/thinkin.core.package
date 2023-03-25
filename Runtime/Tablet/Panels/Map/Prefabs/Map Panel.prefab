@@ -97,54 +97,25 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4673380238581101674}
     m_Modifications:
-    - target: {fileID: 457454463011810471, guid: 9072e18bf313f684587ba0ff797990fd, type: 3}
-      propertyPath: m_Size.x
-      value: 0.175
-      objectReference: {fileID: 0}
-    - target: {fileID: 457454463011810471, guid: 9072e18bf313f684587ba0ff797990fd, type: 3}
-      propertyPath: m_Size.y
-      value: 0.013
-      objectReference: {fileID: 0}
     - target: {fileID: 2876573327814516999, guid: 9072e18bf313f684587ba0ff797990fd, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.17376557
-      objectReference: {fileID: 0}
-    - target: {fileID: 2876573327814516999, guid: 9072e18bf313f684587ba0ff797990fd, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0.012606213
-      objectReference: {fileID: 0}
-    - target: {fileID: 8544906328309761334, guid: 9072e18bf313f684587ba0ff797990fd, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0.011881163
-      objectReference: {fileID: 0}
-    - target: {fileID: 9142470441993001492, guid: 9072e18bf313f684587ba0ff797990fd, type: 3}
-      propertyPath: m_text
-      value: http://current.location/bar/this/is/a/really/long/url/here we really
-        go its getting to be stupid long what with this and that
+      value: 0.29675505
       objectReference: {fileID: 0}
     - target: {fileID: 9142470441993001492, guid: 9072e18bf313f684587ba0ff797990fd, type: 3}
       propertyPath: m_fontSize
-      value: 12
+      value: 44.75
       objectReference: {fileID: 0}
     - target: {fileID: 9142470441993001492, guid: 9072e18bf313f684587ba0ff797990fd, type: 3}
       propertyPath: m_fontSizeBase
-      value: 12
-      objectReference: {fileID: 0}
-    - target: {fileID: 9142470441993001492, guid: 9072e18bf313f684587ba0ff797990fd, type: 3}
-      propertyPath: m_overflowMode
-      value: 3
+      value: 19.04
       objectReference: {fileID: 0}
     - target: {fileID: 9142470441993001492, guid: 9072e18bf313f684587ba0ff797990fd, type: 3}
       propertyPath: m_enableAutoSizing
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9142470441993001494, guid: 9072e18bf313f684587ba0ff797990fd, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 35.4
-      objectReference: {fileID: 0}
-    - target: {fileID: 9142470441993001494, guid: 9072e18bf313f684587ba0ff797990fd, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 2.8
+      value: 61.11
       objectReference: {fileID: 0}
     - target: {fileID: 9142470443536514140, guid: 9072e18bf313f684587ba0ff797990fd, type: 3}
       propertyPath: m_Name
@@ -155,8 +126,20 @@ PrefabInstance:
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 9142470443536514142, guid: 9072e18bf313f684587ba0ff797990fd, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.5911527
+      objectReference: {fileID: 0}
+    - target: {fileID: 9142470443536514142, guid: 9072e18bf313f684587ba0ff797990fd, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.5911527
+      objectReference: {fileID: 0}
+    - target: {fileID: 9142470443536514142, guid: 9072e18bf313f684587ba0ff797990fd, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.5911527
+      objectReference: {fileID: 0}
+    - target: {fileID: 9142470443536514142, guid: 9072e18bf313f684587ba0ff797990fd, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.0343
+      value: -0.0335
       objectReference: {fileID: 0}
     - target: {fileID: 9142470443536514142, guid: 9072e18bf313f684587ba0ff797990fd, type: 3}
       propertyPath: m_LocalPosition.y
@@ -164,7 +147,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9142470443536514142, guid: 9072e18bf313f684587ba0ff797990fd, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.0009
+      value: 0.00082031
       objectReference: {fileID: 0}
     - target: {fileID: 9142470443536514142, guid: 9072e18bf313f684587ba0ff797990fd, type: 3}
       propertyPath: m_LocalRotation.w

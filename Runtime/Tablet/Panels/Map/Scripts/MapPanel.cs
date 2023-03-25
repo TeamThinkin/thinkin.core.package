@@ -22,7 +22,6 @@ public class MapPanel : TabPanel
     protected override void OnShow()
     {
         base.OnShow();
-
         UrlTextbox.Text = DestinationPresenter.Instance.CurrentUrl;
 
         loadMapList();
